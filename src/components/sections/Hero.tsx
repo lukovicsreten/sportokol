@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { DotBackground } from "@/components/ui/DotBackground";
 import { DeckIcon } from "@/components/ui/DeckIcon";
-import { LogoMark } from "@/components/Logo";
+import { LogoIntro } from "@/components/LogoIntro";
 
 const SPORTS = [
   { icon: "football", label: "Football" },
@@ -85,15 +85,12 @@ export function Hero() {
           </div>
         </div>
 
-        <div
-          className="scale-in relative mx-auto flex h-64 w-64 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96"
-          style={{ animationDelay: "200ms" }}
-        >
+        {/* Smaller than the old static tile: the animated mark carries more
+            visual weight, and on phones it must not crowd out the copy. */}
+        <div className="relative mx-auto flex w-40 items-center justify-center sm:w-56 md:w-72">
           <div className="absolute inset-0 rounded-[2.5rem] bg-lime/10 blur-3xl" />
-          {/* The deck's mark is already a rounded tile, so it stands on its own
-              rather than sitting inside a second frame. */}
-          <div className="animate-float relative h-full w-full drop-shadow-2xl">
-            <LogoMark priority />
+          <div className="animate-float relative w-full">
+            <LogoIntro />
           </div>
         </div>
       </div>

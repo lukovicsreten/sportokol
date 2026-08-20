@@ -1,26 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-/** The Sportokol eye-and-swoosh mark, lifted from the deck's own artwork. */
-export function LogoMark({
-  className,
-  priority = false,
-}: {
-  className?: string;
-  priority?: boolean;
-}) {
-  return (
-    <Image
-      src="/brand/mark.png"
-      alt="Sportokol logo — an eye with a checkmark, representing scouting and verified talent tracking"
-      width={256}
-      height={256}
-      priority={priority}
-      className={cn("h-full w-full object-contain", className)}
-    />
-  );
-}
-
 export function LogoWordmark({ className }: { className?: string }) {
   return (
     <Image
