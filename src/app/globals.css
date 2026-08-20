@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Design tokens. Declared in `@theme` (not `@theme inline`) so Tailwind both
+ * generates the utilities (bg-navy-950, text-lime, …) and exposes the values
+ * as CSS custom properties for hand-written rules.
+ */
+@theme {
+  --color-navy-950: #0b1220;
+  --color-navy-900: #0f1b2e;
+  --color-navy-800: #141f35;
+  --color-lime: #c6f135;
+  --color-lime-dim: rgba(198, 241, 53, 0.15);
+  --color-offwhite: #f4f6fa;
+  --color-slate-light: #aab4c8;
+  --color-ink: #0f1b2e;
+  --color-graphite: #5b6b85;
+
+  --animate-float: float 6s ease-in-out infinite;
 }
 
+/* next/font injects these at runtime, so they must resolve inline. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
   }
 }
 
+/*
+ * Hero reveal. Pure CSS so the above-the-fold content paints on first frame
+ * without waiting for JS/hydration — keeps LCP fast and the page readable
+ * even if the JS bundle never arrives.
+ */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.scale-in {
+  animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-navy-950);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-navy-950);
+  color: var(--color-ink);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--color-lime);
+  color: var(--color-navy-950);
+}
+
+.balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .rise-in,
+  .scale-in,
+  .animate-float {
+    animation: none;
+  }
 }
