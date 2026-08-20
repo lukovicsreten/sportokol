@@ -25,10 +25,10 @@ const ITEMS = [
 
 export function Wedge() {
   return (
-    <Section id="wedge" dark dots>
+    <Section id="wedge" dark dots aria-label="The wedge: national talent infrastructure">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
-          <SectionKicker>The Wedge</SectionKicker>
+          <SectionKicker dark>The Wedge</SectionKicker>
           <h2 className="balance text-3xl font-bold tracking-tight text-lime sm:text-4xl md:text-5xl">
             National talent infrastructure
           </h2>

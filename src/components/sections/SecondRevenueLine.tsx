@@ -14,10 +14,10 @@ const WHO_NEEDS_IT = [
 
 export function SecondRevenueLine() {
   return (
-    <Section id="second-revenue-line" dark dots>
+    <Section id="second-revenue-line" dark dots aria-label="Second revenue line">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
-          <SectionKicker>Second Revenue Line</SectionKicker>
+          <SectionKicker dark>Second Revenue Line</SectionKicker>
           <h2 className="balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
             The data itself becomes <span className="text-lime">a business</span>
           </h2>

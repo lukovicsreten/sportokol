@@ -36,10 +36,10 @@ const FOUNDERS = [
 
 export function Founders() {
   return (
-    <Section id="team" dark dots>
+    <Section id="team" dark dots aria-label="The founders">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
-          <SectionKicker>The Founders</SectionKicker>
+          <SectionKicker dark>The Founders</SectionKicker>
           <h2 className="balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
             Sports operations meets{" "}
             <span className="text-lime">founding expertise</span>

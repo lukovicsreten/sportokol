@@ -11,6 +11,9 @@
   --color-navy-800: #141f35;
   --color-lime: #c6f135;
   --color-lime-dim: rgba(198, 241, 53, 0.15);
+  /* Same hue as --color-lime, darkened until it clears WCAG AA (5.35:1) on
+     the light surfaces. The bright lime is 1.3:1 there — unreadable. */
+  --color-lime-ink: #566e08;
   --color-offwhite: #f4f6fa;
   --color-slate-light: #aab4c8;
   --color-ink: #0f1b2e;
@@ -22,7 +25,6 @@
 /* next/font injects these at runtime, so they must resolve inline. */
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @keyframes float {
@@ -70,6 +72,69 @@
   animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/*
+ * The page is ~32,000px of server-rendered markup, so the browser was laying
+ * out every section before it could paint the hero — Lighthouse measured 3.5s
+ * of LCP "render delay" against 1.2s of style & layout.
+ *
+ * `content-visibility: auto` lets it skip layout and paint for sections that
+ * are still off-screen. `contain-intrinsic-size` supplies a placeholder height
+ * so the scrollbar stays stable (the `auto` keyword makes Chrome remember each
+ * section's real height once measured, so scroll position never jumps).
+ */
+@keyframes grow-bar {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--bar-width, 100%);
+  }
+}
+
+/*
+ * Allocation bars, on the same scroll timeline as `.reveal`. Without the
+ * timeline they render at their final width, so the numbers are still right.
+ */
+.grow-bar {
+  width: var(--bar-width, 100%);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .grow-bar {
+      animation: grow-bar linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry calc(85% + var(--reveal-delay, 0%));
+    }
+  }
+}
+
+/*
+ * Scroll-reveal, driven entirely by CSS scroll timelines.
+ *
+ * The base `.reveal` is deliberately un-styled: browsers without
+ * `animation-timeline` (Firefox, Safari today) render the content normally,
+ * so a missing feature can never hide copy. Only where the timeline is
+ * supported does the element start faded and rise into place.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      /* Finish while the element is still entering the viewport, so text
+         spends as little time as possible at reduced opacity — a partially
+         faded paragraph is also partially failing contrast. */
+      animation-range: entry 5% entry calc(70% + var(--reveal-delay, 0%));
+    }
+  }
+}
+
+.defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--color-navy-950);
@@ -84,6 +149,22 @@ body {
 ::selection {
   background: var(--color-lime);
   color: var(--color-navy-950);
+}
+
+/*
+ * Visible keyboard focus. `:focus-visible` keeps the ring off mouse clicks
+ * while guaranteeing every interactive element is traceable by keyboard —
+ * the lime reads against both the navy and off-white surfaces.
+ */
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* details/summary drives the FAQ; hide the default marker in every engine. */
+summary::-webkit-details-marker {
+  display: none;
 }
 
 .balance {

@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { Card } from "@/components/ui/Card";
@@ -38,7 +37,7 @@ const PROBLEMS = [
 
 export function Problem() {
   return (
-    <Section id="problem">
+    <Section id="problem" aria-label="The problem">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>The Problem</SectionKicker>
@@ -61,13 +60,7 @@ export function Problem() {
               The Talent Funnel
             </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="mx-auto mt-6 w-full max-w-[280px]"
-            >
+            <div className="reveal mx-auto mt-6 w-full max-w-[280px]">
               <p className="mb-1 text-center text-xs font-semibold text-slate-light">
                 1,000,000+ players
               </p>
@@ -78,7 +71,7 @@ export function Problem() {
                 height={440}
                 className="h-auto w-full"
               />
-            </motion.div>
+            </div>
           </div>
 
           <div className="mt-8">
@@ -109,7 +102,7 @@ export function Problem() {
               <p className="mt-3 flex gap-2 border-t border-black/5 pt-3 text-sm font-medium leading-relaxed text-ink">
                 <DeckIcon
                   name="arrow-right"
-                  className="mt-1 h-3.5 w-3.5 shrink-0 text-lime"
+                  className="mt-1 h-3.5 w-3.5 shrink-0 text-lime-ink"
                 />
                 {p.fix}
               </p>
@@ -118,7 +111,7 @@ export function Problem() {
         </div>
       </div>
 
-      <p className="mt-6 text-center text-xs text-graphite/70">
+      <p className="mt-6 text-center text-xs text-graphite">
         Sources: Univ. of Essex (2024) &middot; Teesside / Blakelock &middot;
         age-effective research
       </p>

@@ -1,62 +1,91 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist } from "next/font/google";
 import "./globals.css";
-import { MotionProvider } from "@/components/MotionProvider";
+import { StructuredData } from "@/components/StructuredData";
+import {
+  siteUrl,
+  siteName,
+  siteTitle,
+  siteDescription,
+  siteKeywords,
+} from "@/lib/site";
 
+// Only the weights the design actually uses are requested, and `swap` renders
+// fallback text immediately instead of blocking on the webfont.
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const siteUrl = "https://sportokol.com";
-const title = "Sportokol — Never lose a future professional again.";
-const description =
-  "A scout-first platform that turns pitch-side observation into a living, national database of talent. Sports management systems for clubs, academies, agencies and federations.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title,
-  description,
-  keywords: [
-    "sports scouting software",
-    "talent identification platform",
-    "youth football scouting",
-    "sports management system",
-    "player database",
-    "sportokol",
-  ],
+  title: {
+    default: siteTitle,
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  keywords: siteKeywords,
+  authors: [{ name: siteName }],
+  creator: siteName,
+  publisher: siteName,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title,
-    description,
+    title: siteTitle,
+    description: siteDescription,
     url: siteUrl,
-    siteName: "Sportokol",
+    siteName,
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description,
+    title: siteTitle,
+    description: siteDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   icons: {
-    icon: "/brand/mark.png",
-    apple: "/brand/mark.png",
+    icon: [
+      { url: "/brand/mark.png", sizes: "256x256", type: "image/png" },
+      { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/icon-192.png", sizes: "192x192" }],
   },
+  manifest: "/manifest.webmanifest",
+  category: "technology",
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0B1220",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-navy-950">
-        <MotionProvider>{children}</MotionProvider>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-lime focus:px-4 focus:py-2 focus:font-semibold focus:text-navy-950"
+        >
+          Skip to content
+        </a>
+        <StructuredData />
+        {children}
       </body>
     </html>
   );

@@ -38,7 +38,7 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <Section id="how-it-works">
+    <Section id="how-it-works" aria-label="How it works">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>How It Works</SectionKicker>
@@ -99,7 +99,7 @@ export function HowItWorks() {
 
             {i < STEPS.length - 1 && (
               <div className="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center md:flex">
-                <DeckIcon name="arrow-right" className="h-6 w-6 text-lime" />
+                <DeckIcon name="arrow-right" className="h-6 w-6 text-lime-ink" />
               </div>
             )}
           </div>

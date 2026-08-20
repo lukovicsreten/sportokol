@@ -19,7 +19,7 @@ export function Hero() {
       id="top"
       className="relative overflow-hidden bg-gradient-to-b from-navy-950 via-navy-950 to-navy-900 text-white"
     >
-      <DotBackground priority />
+      <DotBackground />
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 pb-20 pt-36 sm:px-8 sm:pt-40 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:pb-28">
         <div>
           <div className="rise-in mb-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-lime">
@@ -27,18 +27,12 @@ export function Hero() {
             Sports Management Systems
           </div>
 
-          <h1
-            className="rise-in balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-[68px]"
-            style={{ animationDelay: "60ms" }}
-          >
+          <h1 className="balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-[68px]">
             Never lose a future <span className="text-lime">professional</span>{" "}
             again.
           </h1>
 
-          <p
-            className="rise-in mt-6 max-w-lg text-lg leading-relaxed text-slate-light"
-            style={{ animationDelay: "150ms" }}
-          >
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-light">
             A scout-first platform that turns pitch-side observation into a
             living, national database of talent.
           </p>
@@ -66,8 +60,7 @@ export function Hero() {
             className="rise-in mt-5 text-sm text-slate-light"
             style={{ animationDelay: "350ms" }}
           >
-            Live modules today &middot; sport-agnostic platform, built to
-            extend
+            Live modules today &middot; sport-agnostic platform, built to extend
           </p>
 
           <div

@@ -34,10 +34,10 @@ const PHASES = [
 
 export function Roadmap() {
   return (
-    <Section id="roadmap" dark dots>
+    <Section id="roadmap" dark dots aria-label="Vision and roadmap">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
-          <SectionKicker>Vision &amp; Roadmap</SectionKicker>
+          <SectionKicker dark>Vision &amp; Roadmap</SectionKicker>
           <h2 className="balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
             Where this goes
           </h2>

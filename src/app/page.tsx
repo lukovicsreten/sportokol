@@ -69,12 +69,15 @@ const Founders = dynamic(() =>
 const FinalCTA = dynamic(() =>
   import("@/components/sections/FinalCTA").then((m) => m.FinalCTA)
 );
+const Faq = dynamic(() =>
+  import("@/components/sections/Faq").then((m) => m.Faq)
+);
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <Hero />
         <Problem />
         <Platform />
@@ -95,6 +98,7 @@ export default function Home() {
         <Runway />
         <UseOfFunds />
         <Founders />
+        <Faq />
         <FinalCTA />
       </main>
       <Footer />

@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { AnimatedCounter } from "./AnimatedCounter";
 
@@ -12,6 +9,7 @@ type StatCardProps = {
   label: string;
   dark?: boolean;
   className?: string;
+  /** Stagger, in seconds. */
   delay?: number;
 };
 
@@ -26,13 +24,10 @@ export function StatCard({
   delay = 0,
 }: StatCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+    <div
+      style={delay ? ({ "--reveal-delay": `${delay * 40}%` } as React.CSSProperties) : undefined}
       className={cn(
-        "rounded-2xl border p-6",
+        "reveal rounded-2xl border p-6",
         dark
           ? "border-lime-dim bg-navy-800"
           : "border-black/5 bg-white shadow-[0_1px_2px_rgba(15,27,46,0.04),0_12px_32px_-16px_rgba(15,27,46,0.12)]",
@@ -50,6 +45,6 @@ export function StatCard({
       >
         {label}
       </p>
-    </motion.div>
+    </div>
   );
 }

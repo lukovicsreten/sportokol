@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { Reveal } from "@/components/ui/Reveal";
@@ -45,19 +41,13 @@ const ALLOCATIONS = [
 ];
 
 /**
- * The bars grow via a plain CSS transition off a single viewport trigger on
- * their container. Giving each bar its own `whileInView` nested inside the
- * section's reveal left them stuck at zero width.
+ * The bars grow with a CSS scroll-driven animation, same mechanism as
+ * `.reveal`. An earlier version gave each bar its own Framer `whileInView`
+ * nested inside the section reveal and they stayed stuck at zero width.
  */
 function AllocationList() {
-  const [shown, setShown] = useState(false);
-
   return (
-    <motion.ul
-      onViewportEnter={() => setShown(true)}
-      viewport={{ once: true, margin: "-40px" }}
-      className="space-y-6"
-    >
+    <ul className="space-y-6">
       {ALLOCATIONS.map((a, i) => (
         <li key={a.label}>
           <div className="mb-2 flex items-center justify-between gap-4">
@@ -74,48 +64,46 @@ function AllocationList() {
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-black/5">
             <div
-              className="h-full rounded-full transition-[width] duration-700 ease-out motion-reduce:transition-none"
-              style={{
-                width: shown ? `${a.pct}%` : 0,
-                backgroundColor: a.color,
-                transitionDelay: `${i * 100}ms`,
-              }}
+              className="grow-bar h-full rounded-full"
+              style={
+                {
+                  "--bar-width": `${a.pct}%`,
+                  "--reveal-delay": `${i * 3}%`,
+                  backgroundColor: a.color,
+                } as React.CSSProperties
+              }
             />
           </div>
           <p className="mt-2 text-sm leading-relaxed text-graphite">{a.body}</p>
         </li>
       ))}
-    </motion.ul>
+    </ul>
   );
 }
 
 function StackedBar() {
-  const [shown, setShown] = useState(false);
-
   return (
-    <motion.div
-      onViewportEnter={() => setShown(true)}
-      viewport={{ once: true, margin: "-40px" }}
-      className="flex h-10 w-full overflow-hidden rounded-full bg-white/5"
-    >
+    <div className="flex h-10 w-full overflow-hidden rounded-full bg-white/5">
       {ALLOCATIONS.map((a, i) => (
         <div
           key={a.label}
-          className="h-full transition-[width] duration-700 ease-out motion-reduce:transition-none"
-          style={{
-            width: shown ? `${a.pct}%` : 0,
-            backgroundColor: a.color,
-            transitionDelay: `${i * 100}ms`,
-          }}
+          className="grow-bar h-full"
+          style={
+            {
+              "--bar-width": `${a.pct}%`,
+              "--reveal-delay": `${i * 3}%`,
+              backgroundColor: a.color,
+            } as React.CSSProperties
+          }
         />
       ))}
-    </motion.div>
+    </div>
   );
 }
 
 export function UseOfFunds() {
   return (
-    <Section id="use-of-funds">
+    <Section id="use-of-funds" aria-label="Use of funds">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>Use Of Funds</SectionKicker>

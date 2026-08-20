@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { ProductShot } from "@/components/ui/ProductShot";
 import { DeckIcon } from "@/components/ui/DeckIcon";
@@ -14,7 +13,7 @@ const QUESTIONS = [
 
 export function AskDatabase() {
   return (
-    <Section id="ask" dark className="bg-gradient-to-b from-navy-900 to-navy-950">
+    <Section id="ask" dark aria-label="Ask your database" className="bg-gradient-to-b from-navy-900 to-navy-950">
       <div className="grid grid-cols-1 items-center gap-14 md:grid-cols-2 md:gap-16">
         <Reveal className="order-2 md:order-1">
           <ProductShot
@@ -37,17 +36,14 @@ export function AskDatabase() {
 
           <div className="mt-8 space-y-3">
             {QUESTIONS.map((q, i) => (
-              <motion.div
+              <div
                 key={q}
-                initial={{ opacity: 0, x: 16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.1 }}
-                className="ml-auto flex max-w-sm items-start gap-2.5 rounded-2xl rounded-tr-sm bg-lime px-4 py-3 text-sm font-medium text-navy-950 shadow-lg"
+                style={{ "--reveal-delay": `${i * 4}%` } as React.CSSProperties}
+                className="reveal ml-auto flex max-w-sm items-start gap-2.5 rounded-2xl rounded-tr-sm bg-lime px-4 py-3 text-sm font-medium text-navy-950 shadow-lg"
               >
                 <DeckIcon name="chat" className="mt-0.5 h-4 w-4 shrink-0" />
                 {q}
-              </motion.div>
+              </div>
             ))}
           </div>
         </Reveal>

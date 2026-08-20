@@ -24,10 +24,10 @@ const WHY_NOW = [
 
 export function TheAsk() {
   return (
-    <Section id="ask-round" dark dots>
+    <Section id="ask-round" dark dots aria-label="The ask: funding round">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
-          <SectionKicker>The Ask</SectionKicker>
+          <SectionKicker dark>The Ask</SectionKicker>
           <h2 className="balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
             Raising to turn proven local demand into international ARR
           </h2>

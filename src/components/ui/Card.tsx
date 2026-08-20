@@ -1,17 +1,18 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type CardProps = {
   children: React.ReactNode;
   className?: string;
   dark?: boolean;
-  as?: "div";
+  /** Stagger, in seconds, matching the previous Framer API. */
   delay?: number;
   hover?: boolean;
 };
 
+/**
+ * Reveal and hover-lift are both CSS now (see Reveal for why), so this is a
+ * server component and ships no JavaScript.
+ */
 export function Card({
   children,
   className,
@@ -20,14 +21,11 @@ export function Card({
   hover = true,
 }: CardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
-      whileHover={hover ? { y: -4 } : undefined}
+    <div
+      style={delay ? ({ "--reveal-delay": `${delay * 40}%` } as React.CSSProperties) : undefined}
       className={cn(
-        "rounded-2xl border p-6 transition-colors duration-300 sm:p-7",
+        "reveal rounded-2xl border p-6 transition-[colors,transform] duration-300 sm:p-7",
+        hover && "hover:-translate-y-1",
         dark
           ? "border-lime-dim bg-navy-800 hover:border-lime/40"
           : "border-black/5 bg-white shadow-[0_1px_2px_rgba(15,27,46,0.04),0_12px_32px_-16px_rgba(15,27,46,0.12)] hover:border-lime/50",
@@ -35,6 +33,6 @@ export function Card({
       )}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

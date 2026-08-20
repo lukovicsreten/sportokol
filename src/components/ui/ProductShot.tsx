@@ -48,7 +48,7 @@ export function ProductShot({
         )}
       >
         {caption}
-        <span className="mt-1 block text-xs opacity-70 sm:hidden">
+        <span className="mt-1 block text-xs sm:hidden">
           Swipe the image to explore
         </span>
       </figcaption>

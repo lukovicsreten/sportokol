@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { DeckIcon } from "@/components/ui/DeckIcon";
 import { DotBackground } from "@/components/ui/DotBackground";
 import { LogoMark } from "@/components/Logo";
@@ -49,18 +48,14 @@ export function FinalCTA() {
           </p>
         </Reveal>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative mx-auto flex h-56 w-56 items-center justify-center sm:h-72 sm:w-72 md:h-80 md:w-80"
+        <div
+          className="reveal relative mx-auto flex h-56 w-56 items-center justify-center sm:h-72 sm:w-72 md:h-80 md:w-80"
         >
           <div className="absolute inset-0 rounded-[2.5rem] bg-lime/10 blur-3xl" />
           <div className="animate-float relative h-full w-full drop-shadow-2xl">
             <LogoMark />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -28,7 +28,7 @@ const ROWS = [
 
 export function Market() {
   return (
-    <Section id="market">
+    <Section id="market" aria-label="Market opportunity">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>Market Opportunity</SectionKicker>
@@ -95,7 +95,7 @@ export function Market() {
         </div>
       </Reveal>
 
-      <p className="mt-4 text-center text-xs text-graphite/70">
+      <p className="mt-4 text-center text-xs text-graphite">
         Assumption: Reaching 10% of markets. Order-of-magnitude estimate;
         swings most on final pricing and academy/agency conversion.
       </p>

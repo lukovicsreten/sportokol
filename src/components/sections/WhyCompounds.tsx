@@ -15,8 +15,8 @@ const SERIES = [
 
 export function WhyCompounds() {
   return (
-    <Section id="why-compounds" dark>
-      <SectionKicker className="mx-auto flex w-fit md:mx-0">
+    <Section id="why-compounds" dark aria-label="Why the data compounds">
+      <SectionKicker dark className="mx-auto flex w-fit md:mx-0">
         Why The Data Compounds
       </SectionKicker>
       <Reveal>

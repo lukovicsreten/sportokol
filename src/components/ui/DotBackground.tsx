@@ -1,30 +1,26 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * The deck's own constellation backdrop, used behind dark sections. It is a
- * decorative tile, so it stays out of the accessibility tree and never blocks
- * paint.
+ * The deck's constellation backdrop, behind dark sections.
+ *
+ * Painted as a CSS background rather than <Image fill>: it is purely
+ * decorative, it repeats across eight sections, and `object-cover` on a
+ * fixed-ratio photo made Lighthouse flag every instance for a distorted
+ * aspect ratio. As CSS it is one cached 11KB request and no DOM images.
  */
-export function DotBackground({
-  className,
-  priority = false,
-}: {
-  className?: string;
-  priority?: boolean;
-}) {
+export function DotBackground({ className }: { className?: string }) {
   return (
     <div
       className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}
       aria-hidden="true"
     >
-      <Image
-        src="/art/dot-field.jpg"
-        alt=""
-        fill
-        sizes="100vw"
-        priority={priority}
-        className="object-cover opacity-70"
+      <div
+        className="absolute inset-0 opacity-70"
+        style={{
+          backgroundImage: "url(/art/dot-field.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-950/30 to-navy-950" />
     </div>

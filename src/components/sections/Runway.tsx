@@ -30,7 +30,7 @@ const MILESTONES = [
 
 export function Runway() {
   return (
-    <Section id="runway">
+    <Section id="runway" aria-label="The runway">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>The Runway</SectionKicker>
@@ -49,7 +49,7 @@ export function Runway() {
         {STEPS.map((s, i) => (
           <div key={s.title} className="relative">
             <Card delay={i * 0.1}>
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-lime">
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-lime-ink">
                 {s.range}
               </p>
               <h3 className="mt-1 text-base font-semibold text-ink">
@@ -61,7 +61,7 @@ export function Runway() {
             </Card>
             {i < STEPS.length - 1 && (
               <div className="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center sm:flex">
-                <DeckIcon name="arrow-right" className="h-6 w-6 text-lime" />
+                <DeckIcon name="arrow-right" className="h-6 w-6 text-lime-ink" />
               </div>
             )}
           </div>

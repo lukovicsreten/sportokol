@@ -26,7 +26,7 @@ const BUYERS = [
 
 export function BusinessModelBuyers() {
   return (
-    <Section id="business-model">
+    <Section id="business-model" aria-label="Business model: buyers">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>Business Model</SectionKicker>

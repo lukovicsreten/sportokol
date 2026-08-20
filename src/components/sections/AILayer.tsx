@@ -31,10 +31,10 @@ const SOURCES = [
 
 export function AILayer() {
   return (
-    <Section id="ai-layer" dark dots>
+    <Section id="ai-layer" dark dots aria-label="The AI layer">
       <div className="grid grid-cols-1 items-center gap-14 md:grid-cols-2 md:gap-12">
         <Reveal>
-          <SectionKicker>The AI Layer</SectionKicker>
+          <SectionKicker dark>The AI Layer</SectionKicker>
           <h2 className="balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-[44px]">
             Trained by the people who actually judge talent
           </h2>

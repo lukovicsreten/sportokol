@@ -4,7 +4,7 @@ type BadgeProps = {
   children: React.ReactNode;
   className?: string;
   variant?: "solid" | "outline" | "dashed";
-  tone?: "lime" | "navy" | "white";
+  tone?: "lime" | "lime-ink" | "navy" | "white";
 };
 
 export function Badge({
@@ -14,7 +14,10 @@ export function Badge({
   tone = "lime",
 }: BadgeProps) {
   const toneStyles = {
+    // Only for dark surfaces — 14:1 on navy, 1.3:1 on white.
     lime: "border-lime/30 text-lime bg-lime/10",
+    // Same hue, darkened for light surfaces (5.4:1 on white).
+    "lime-ink": "border-lime-ink/30 text-lime-ink bg-lime-ink/10",
     navy: "border-white/15 text-white bg-white/5",
     white: "border-black/10 text-ink bg-black/[0.03]",
   } as const;

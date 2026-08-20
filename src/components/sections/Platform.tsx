@@ -12,7 +12,7 @@ const SPORTS = [
 
 export function Platform() {
   return (
-    <Section id="platform">
+    <Section id="platform" aria-label="The platform">
       <div className="grid grid-cols-1 items-center gap-14 md:grid-cols-2 md:gap-12">
         <Reveal>
           <SectionKicker>The Platform</SectionKicker>
@@ -36,7 +36,7 @@ export function Platform() {
                   key={s.label}
                   className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink shadow-sm"
                 >
-                  <DeckIcon name={s.icon} className="h-4 w-4 text-lime" />
+                  <DeckIcon name={s.icon} className="h-4 w-4 text-lime-ink" />
                   {s.label}
                 </span>
               ))}

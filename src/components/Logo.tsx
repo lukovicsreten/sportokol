@@ -12,7 +12,7 @@ export function LogoMark({
   return (
     <Image
       src="/brand/mark.png"
-      alt="Sportokol"
+      alt="Sportokol logo — an eye with a checkmark, representing scouting and verified talent tracking"
       width={256}
       height={256}
       priority={priority}
@@ -26,6 +26,7 @@ export function LogoWordmark({ className }: { className?: string }) {
     <Image
       src="/brand/wordmark.png"
       alt="Sportokol"
+      // The mark is decorative alongside the name, so the alt is just the name.
       width={640}
       height={188}
       priority

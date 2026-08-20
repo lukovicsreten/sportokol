@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { Reveal } from "@/components/ui/Reveal";
@@ -35,7 +34,7 @@ const STORIES = [
 
 export function SuccessStories() {
   return (
-    <Section id="success-stories">
+    <Section id="success-stories" aria-label="Success stories">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>Success Stories</SectionKicker>
@@ -47,13 +46,10 @@ export function SuccessStories() {
 
       <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-2">
         {STORIES.map((s, i) => (
-          <motion.div
+          <article
             key={s.name}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
-            className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_1px_2px_rgba(15,27,46,0.04),0_24px_48px_-24px_rgba(15,27,46,0.16)]"
+            style={{ "--reveal-delay": `${i * 4}%` } as React.CSSProperties}
+            className="reveal overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_1px_2px_rgba(15,27,46,0.04),0_24px_48px_-24px_rgba(15,27,46,0.16)]"
           >
             <div className="relative h-40">
               <Image
@@ -87,7 +83,7 @@ export function SuccessStories() {
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </article>
         ))}
       </div>
     </Section>

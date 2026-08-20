@@ -28,7 +28,9 @@ export function Footer() {
             <a
               key={link.href}
               href={link.href}
-              className="inline-flex min-h-11 items-center px-2 hover:text-white"
+              // Explicit colour: an <a> with no colour falls back to the UA's
+              // link blue, which the dark colour-scheme renders at 2.4:1 here.
+              className="inline-flex min-h-11 items-center px-2 text-slate-light hover:text-white"
             >
               {link.label}
             </a>

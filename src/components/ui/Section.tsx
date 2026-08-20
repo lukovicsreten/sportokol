@@ -8,6 +8,9 @@ type SectionProps = {
   className?: string;
   innerClassName?: string;
   children: React.ReactNode;
+  /** Names the section so it is exposed as a navigable landmark. */
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
 };
 
 export function Section({
@@ -17,12 +20,14 @@ export function Section({
   className,
   innerClassName,
   children,
+  ...aria
 }: SectionProps) {
   return (
     <section
       id={id}
+      {...aria}
       className={cn(
-        "relative scroll-mt-20 overflow-hidden",
+        "relative scroll-mt-20 overflow-hidden defer-render",
         dark ? "bg-navy-950 text-white" : "bg-offwhite text-ink",
         className
       )}

@@ -12,7 +12,7 @@ const SOFTWARE_TIERS = [
 
 export function RevenueEngines() {
   return (
-    <Section id="revenue-engines">
+    <Section id="revenue-engines" aria-label="Revenue engines">
       <Reveal className="mx-auto max-w-3xl text-center">
         <h2 className="balance text-3xl font-bold tracking-tight text-ink sm:text-4xl md:text-5xl">
           Two revenue lines, one compounding dataset
@@ -30,7 +30,7 @@ export function RevenueEngines() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-graphite">
               Engine 1: Recurring Software
             </p>
-            <Badge tone="lime" variant="outline">
+            <Badge tone="lime-ink" variant="outline">
               Live today
             </Badge>
           </div>

@@ -33,8 +33,8 @@ const STREAMS = [
 
 export function DataAsset() {
   return (
-    <Section id="data-asset" dark>
-      <SectionKicker className="mx-auto flex w-fit md:mx-0">
+    <Section id="data-asset" dark aria-label="The data asset">
+      <SectionKicker dark className="mx-auto flex w-fit md:mx-0">
         The Data Asset
       </SectionKicker>
       <Reveal>

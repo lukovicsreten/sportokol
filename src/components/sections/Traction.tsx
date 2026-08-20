@@ -30,7 +30,7 @@ const ITEMS = [
 
 export function Traction() {
   return (
-    <Section id="traction">
+    <Section id="traction" aria-label="Traction and validation">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker>Traction &amp; Validation</SectionKicker>
