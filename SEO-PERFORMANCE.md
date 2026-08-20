@@ -10,17 +10,21 @@ repeated runs on the same machine.
 
 | Category | Mobile before | Mobile after | Desktop after |
 |---|---|---|---|
-| Performance | 84 | **95–98** | **100** |
+| Performance | 84 | **100** | **100** |
 | Accessibility | 92 | **100** | **100** |
 | Best Practices | 93 | **100** | **100** |
 | SEO | 100 | **100** | **100** |
+
+The "after" column is measured against the live deployment on Vercel
+(`https://sportokol-beta.vercel.app`). On a local `next start` the mobile
+performance score lands at 95–98 — same build, noisier machine.
 
 Core Web Vitals, mobile (4× CPU throttle, slow 4G):
 
 | Metric | Before | After |
 |---|---|---|
-| First Contentful Paint | 1.5 s | **0.9 s** |
-| Largest Contentful Paint | 3.5 s | **2.4 s** |
+| First Contentful Paint | 1.5 s | **1.2 s** |
+| Largest Contentful Paint | 3.5 s | **1.7 s** |
 | Total Blocking Time | 309 ms | **40 ms** |
 | Cumulative Layout Shift | 0 | **0** |
 
