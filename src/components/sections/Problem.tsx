@@ -35,7 +35,17 @@ const PROBLEMS = [
   },
 ];
 
-export function Problem() {
+/**
+ * Shared between Home and /product. The compact variant keeps the headline,
+ * the funnel and a terse version of the four failures; the full variant adds
+ * the evidence and the sources.
+ */
+export function Problem({
+  variant = "full",
+}: {
+  variant?: "compact" | "full";
+}) {
+  const compact = variant === "compact";
   return (
     <Section id="problem" aria-label="The problem">
       <div className="mx-auto max-w-3xl text-center">
@@ -46,9 +56,9 @@ export function Problem() {
             remember
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-graphite">
-            Youth football runs the most expensive talent funnel in sport
-            almost blindly, on video that doesn&rsquo;t exist, judgement that
-            isn&rsquo;t shared, and records that leave when people do.
+            {compact
+              ? "Youth football runs the most expensive talent funnel in sport almost blindly."
+              : "Youth football runs the most expensive talent funnel in sport almost blindly, on video that doesn't exist, judgement that isn't shared, and records that leave when people do."}
           </p>
         </Reveal>
       </div>
@@ -87,9 +97,11 @@ export function Problem() {
               <h3 className="text-base font-semibold leading-snug text-ink">
                 {p.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-graphite">
-                {p.body}
-              </p>
+              {!compact && (
+                <p className="mt-2 text-sm leading-relaxed text-graphite">
+                  {p.body}
+                </p>
+              )}
               <p className="mt-3 flex gap-2 border-t border-black/5 pt-3 text-sm font-medium leading-relaxed text-ink">
                 <DeckIcon
                   name="arrow-right"
@@ -102,22 +114,26 @@ export function Problem() {
         </div>
       </div>
 
-      <p className="mt-6 text-center text-xs text-graphite">
-        Sources: Univ. of Essex (2024) &middot; Teesside / Blakelock &middot;
-        age-effective research
-      </p>
+      {!compact && (
+        <p className="mt-6 text-center text-xs text-graphite">
+          Sources: Univ. of Essex (2024) &middot; Teesside / Blakelock &middot;
+          age-effective research
+        </p>
+      )}
 
-      <Reveal className="mt-10">
-        <div className="rounded-2xl bg-navy-950 px-6 py-8 text-center sm:px-10">
-          <p className="balance text-lg font-medium leading-relaxed text-white sm:text-xl">
-            <span className="text-lime">
-              <AnimatedCounter value={1000000} suffix="+" />
-            </span>{" "}
-            registered players in Spain alone and most are never
-            systematically scouted, compared, or tracked over time.
-          </p>
-        </div>
-      </Reveal>
+      {!compact && (
+        <Reveal className="mt-10">
+          <div className="rounded-2xl bg-navy-950 px-6 py-8 text-center sm:px-10">
+            <p className="balance text-lg font-medium leading-relaxed text-white sm:text-xl">
+              <span className="text-lime">
+                <AnimatedCounter value={1000000} suffix="+" />
+              </span>{" "}
+              registered players in Spain alone and most are never
+              systematically scouted, compared, or tracked over time.
+            </p>
+          </div>
+        </Reveal>
+      )}
     </Section>
   );
 }

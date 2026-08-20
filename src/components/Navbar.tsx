@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LogoWordmark } from "./Logo";
 import { cn } from "@/lib/utils";
-import { CHAPTERS } from "@/lib/chapters";
 import { CTA, DECK_NAV_LABEL } from "@/lib/cta";
-import { useScrollSpy } from "./ui/useScrollSpy";
 
 /* The deck has no menu glyph, so these are drawn inline rather than pulling
    in an icon library for a single button. */
@@ -36,18 +36,20 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-const NAV_CHAPTERS = CHAPTERS.filter((c) => c.inNav);
-const SPY_IDS = NAV_CHAPTERS.flatMap((c) => c.sections);
+const LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Product", href: "/product" },
+  { label: "Investors", href: "/investors" },
+  { label: "Contact", href: "/contact" },
+];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
-  const spyIds = useMemo(() => SPY_IDS, []);
-  const activeSection = useScrollSpy(spyIds);
-  const activeChapter = activeSection
-    ? NAV_CHAPTERS.find((c) => c.sections.includes(activeSection))
-    : undefined;
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -56,6 +58,8 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Closing on navigation is handled by each link's onClick rather than an
+  // effect on pathname, which would be a setState inside render's effect.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -78,54 +82,54 @@ export function Navbar() {
         aria-label="Primary"
         className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 sm:px-8"
       >
-        <a
-          href="#top"
+        <Link
+          href="/"
           aria-label="Sportokol home"
           className="inline-flex min-h-11 shrink-0 items-center"
         >
           <LogoWordmark />
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
-          {NAV_CHAPTERS.map((c) => {
-            const isActive = activeChapter?.number === c.number;
+          {LINKS.map((l) => {
+            const active = isActive(l.href);
             return (
-              <li key={c.number}>
-                <a
-                  href={c.anchor}
-                  aria-current={isActive ? "true" : undefined}
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "relative inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium transition-colors",
-                    isActive ? "text-white" : "text-slate-light hover:text-white"
+                    active ? "text-white" : "text-slate-light hover:text-white"
                   )}
                 >
-                  {c.title}
+                  {l.label}
                   <span
                     aria-hidden="true"
                     className={cn(
                       "absolute inset-x-3 bottom-1.5 h-px origin-left bg-lime transition-transform duration-300",
-                      isActive ? "scale-x-100" : "scale-x-0"
+                      active ? "scale-x-100" : "scale-x-0"
                     )}
                   />
-                </a>
+                </Link>
               </li>
             );
           })}
         </ul>
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
-          <a
-            href={CTA.deck.href}
+          <Link
+            href="/investors"
             className="inline-flex min-h-11 items-center rounded-full border border-white/20 px-4 text-sm font-medium text-white transition-colors hover:border-lime hover:text-lime"
           >
             {DECK_NAV_LABEL}
-          </a>
-          <a
-            href={CTA.demo.href}
+          </Link>
+          <Link
+            href="/contact?type=demo"
             className="inline-flex min-h-11 items-center rounded-full bg-lime px-5 text-sm font-semibold text-navy-950 transition-all duration-200 hover:scale-[1.03] hover:brightness-110"
           >
             {CTA.demo.label}
-          </a>
+          </Link>
         </div>
 
         <button
@@ -146,45 +150,42 @@ export function Navbar() {
           className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-white/10 bg-navy-950/95 backdrop-blur-md lg:hidden"
         >
           <ul className="flex flex-col gap-1 px-6 py-4">
-            {NAV_CHAPTERS.map((c) => {
-              const isActive = activeChapter?.number === c.number;
+            {LINKS.map((l) => {
+              const active = isActive(l.href);
               return (
-                <li key={c.number}>
-                  <a
-                    href={c.anchor}
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
                     onClick={() => setOpen(false)}
-                    aria-current={isActive ? "true" : undefined}
+                    aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium",
-                      isActive
+                      "flex min-h-11 items-center rounded-lg px-3 text-sm font-medium",
+                      active
                         ? "bg-white/5 text-white"
                         : "text-slate-light hover:bg-white/5 hover:text-white"
                     )}
                   >
-                    <span className="text-xs font-semibold text-lime">
-                      {c.number}
-                    </span>
-                    {c.title}
-                  </a>
+                    {l.label}
+                  </Link>
                 </li>
               );
             })}
           </ul>
           <div className="flex flex-col gap-2 border-t border-white/10 px-6 py-4">
-            <a
-              href={CTA.demo.href}
+            <Link
+              href="/contact?type=demo"
               onClick={() => setOpen(false)}
               className="flex min-h-11 items-center justify-center rounded-full bg-lime px-5 text-sm font-semibold text-navy-950"
             >
               {CTA.demo.label}
-            </a>
-            <a
-              href={CTA.deck.href}
+            </Link>
+            <Link
+              href="/investors"
               onClick={() => setOpen(false)}
               className="flex min-h-11 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-medium text-white"
             >
               {DECK_NAV_LABEL}
-            </a>
+            </Link>
           </div>
         </div>
       )}

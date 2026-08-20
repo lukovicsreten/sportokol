@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { DotBackground } from "@/components/ui/DotBackground";
 import { DeckIcon } from "@/components/ui/DeckIcon";
 import { LogoMark } from "@/components/Logo";
@@ -50,14 +51,14 @@ export function Hero() {
             style={{ animationDelay: "250ms" }}
           >
             {SPORTS.map((s) => (
-              <a
+              <Link
                 key={s.label}
-                href="#platform"
+                href="/product"
                 className="inline-flex min-h-11 items-center gap-2 rounded-full border border-lime/30 bg-lime/10 px-4 text-sm font-medium text-lime transition-all duration-200 hover:scale-[1.04] hover:border-lime hover:bg-lime/20"
               >
                 <DeckIcon name={s.icon} className="h-4 w-4" />
                 {s.label}
-              </a>
+              </Link>
             ))}
             <span className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dashed border-white/25 px-4 text-sm font-medium text-slate-light">
               <DeckIcon name="plus" className="h-3.5 w-3.5" />

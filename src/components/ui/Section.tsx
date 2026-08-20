@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { DotBackground } from "./DotBackground";
-import { ChapterBar } from "./ChapterBar";
-import { CHAPTER_BY_SECTION, CHAPTER_OPENERS } from "@/lib/chapters";
+import { kindOf } from "@/lib/sectionKinds";
 
 type SectionProps = {
   id?: string;
@@ -15,9 +14,9 @@ type SectionProps = {
 };
 
 /**
- * Surface treatment per content type. Product sections read as light and
- * app-like, evidence sections get a tinted, framed look so results are
- * visibly not features, and business sections stay dark and tabular.
+ * Surface treatment per content type: product sections read light and
+ * app-like, evidence sections get a tinted framed look so results are
+ * visibly not features, business sections stay plain and tabular.
  */
 const KIND_SURFACE = {
   problem: "bg-offwhite text-ink",
@@ -35,17 +34,14 @@ export function Section({
   children,
   ...aria
 }: SectionProps) {
-  const chapter = id ? CHAPTER_BY_SECTION.get(id) : undefined;
-  const opensChapter = Boolean(id && CHAPTER_OPENERS.has(id));
-  const surface = dark
-    ? "bg-navy-950 text-white"
-    : KIND_SURFACE[chapter?.kind ?? "problem"];
+  const kind = kindOf(id);
+  const surface = dark ? "bg-navy-950 text-white" : KIND_SURFACE[kind];
 
   return (
     <section
       id={id}
       {...aria}
-      data-kind={chapter?.kind}
+      data-kind={kind}
       className={cn(
         "relative scroll-mt-20 overflow-hidden defer-render",
         surface,
@@ -59,14 +55,6 @@ export function Section({
           innerClassName
         )}
       >
-        {opensChapter && chapter && (
-          <ChapterBar
-            number={chapter.number}
-            title={chapter.title}
-            kind={chapter.kind}
-            dark={dark}
-          />
-        )}
         {children}
       </div>
     </section>

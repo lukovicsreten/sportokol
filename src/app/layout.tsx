@@ -3,6 +3,8 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { StructuredData } from "@/components/StructuredData";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import {
   siteUrl,
   siteName,
@@ -87,7 +89,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <ReadingProgress />
         <StructuredData />
-        {children}
+        <Navbar />
+        <main id="main" className="flex-1">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

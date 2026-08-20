@@ -5,32 +5,31 @@ import { contactEmail, companySite } from "@/lib/site";
 
 const COLUMNS: {
   heading: string;
-  links: { label: string; href: string; external?: boolean }[];
+  links: { label: string; href: string }[];
 }[] = [
   {
     heading: "Product",
     links: [
-      { label: "Platform", href: "#platform" },
-      { label: "How it works", href: "#how-it-works" },
-      { label: "AI layer", href: "#ai-layer" },
-      { label: "Ask your database", href: "#ask" },
+      { label: "Overview", href: "/product" },
+      { label: "Platform", href: "/product#platform" },
+      { label: "How it works", href: "/product#how-it-works" },
+      { label: "AI layer", href: "/product#ai-layer" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "Team", href: "#team" },
-      { label: "Traction", href: "#traction" },
-      { label: "Success stories", href: "#success-stories" },
-      { label: "FAQ", href: "#faq" },
+      { label: "Team", href: "/investors#team" },
+      { label: "Traction", href: "/investors#traction" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
     heading: "Investors",
     links: [
-      { label: "The ask", href: "#ask-round" },
-      { label: "Runway", href: "#runway" },
-      { label: "Use of funds", href: "#use-of-funds" },
+      { label: "Overview", href: "/investors" },
+      { label: "The ask", href: "/investors#the-ask" },
+      { label: "Use of funds", href: "/investors#use-of-funds" },
       { label: DECK_NAV_LABEL, href: CTA.deck.href },
     ],
   },

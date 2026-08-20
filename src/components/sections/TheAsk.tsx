@@ -24,7 +24,7 @@ const WHY_NOW = [
 
 export function TheAsk() {
   return (
-    <Section id="ask-round" dark dots aria-label="The ask: funding round">
+    <Section id="the-ask" dark dots aria-label="The ask: funding round">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal className="flex flex-col items-center">
           <SectionKicker dark>The Ask</SectionKicker>
