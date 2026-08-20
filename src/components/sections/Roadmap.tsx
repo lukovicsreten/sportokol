@@ -3,6 +3,7 @@ import { Section } from "@/components/ui/Section";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { Card } from "@/components/ui/Card";
 import { Reveal } from "@/components/ui/Reveal";
+import { AiAssessment } from "@/components/illustrations";
 
 const PHASES = [
   {
@@ -43,6 +44,10 @@ export function Roadmap() {
           </h2>
         </Reveal>
       </div>
+
+      <Reveal className="mt-12">
+        <AiAssessment className="mx-auto h-auto w-full max-w-md" />
+      </Reveal>
 
       <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
         {PHASES.map((p, i) => (

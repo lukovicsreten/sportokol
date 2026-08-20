@@ -1,4 +1,4 @@
-import { DeckIcon } from "@/components/ui/DeckIcon";
+import { Flywheel } from "@/components/ui/Flywheel";
 import { Section } from "@/components/ui/Section";
 import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
@@ -101,16 +101,9 @@ export function RevenueEngines() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-lime">
             The flywheel: why both lines grow together
           </p>
-          <div className="mt-5 flex flex-col items-center gap-3 text-center text-sm font-medium text-white sm:flex-row sm:justify-center sm:gap-4 sm:text-base">
-            <span>More subscribers</span>
-            <DeckIcon name="arrow-right" className="h-4 w-4 shrink-0 text-lime" />
-            <span>A richer dataset</span>
-            <DeckIcon name="arrow-right" className="h-4 w-4 shrink-0 text-lime" />
-            <span>A bigger data business</span>
+          <div className="mt-6">
+            <Flywheel />
           </div>
-          <p className="mt-4 text-center text-sm text-slate-light">
-            &times; each new sport multiplies both lines
-          </p>
         </div>
       </Reveal>
     </Section>

@@ -4,6 +4,8 @@ import { Section } from "@/components/ui/Section";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { StatCard } from "@/components/ui/StatCard";
 import { Reveal } from "@/components/ui/Reveal";
+import { SamStack } from "@/components/ui/SamStack";
+import { Disclosure } from "@/components/ui/Disclosure";
 
 const ROWS = [
   {
@@ -113,37 +115,21 @@ export function Market() {
         />
       </div>
 
-      <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-[0_1px_2px_rgba(15,27,46,0.04),0_12px_32px_-16px_rgba(15,27,46,0.12)] sm:p-8">
-          <p className="text-sm font-semibold text-graphite">Football today</p>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            €9-18M ARR
-          </p>
-          <div className="mt-6 border-t border-black/5 pt-6">
-            <p className="text-sm font-semibold text-ink">
-              Basketball &middot; Tennis &middot; more
-            </p>
-            <p className="mt-1 text-sm text-graphite">
-              Same platform, same buyers, same countries
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-2xl bg-navy-950 p-6 text-white sm:p-8">
-          <p className="text-3xl font-bold tracking-tight text-lime sm:text-4xl">
-            €20-50M
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-slate-light">
-            combined multi-sport SAM across Spain + the Balkans, as each
-            market layers sport on sport
-          </p>
-          <p className="mt-5 border-t border-white/10 pt-5 text-xs leading-relaxed text-slate-light">
-            + Data &amp; medtech line (digital twins, injury prediction,
-            licensed data) sits on top of this as optionality - not counted
-            above!
-          </p>
-        </div>
-      </div>
+      <Reveal className="mt-12 rounded-2xl border border-black/5 bg-white p-6 shadow-[0_1px_2px_rgba(15,27,46,0.04),0_12px_32px_-16px_rgba(15,27,46,0.12)] sm:p-8">
+        <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-graphite">
+          How the SAM stacks
+        </p>
+        <SamStack />
+        <p className="mt-5 border-t border-black/5 pt-5 text-sm leading-relaxed text-graphite">
+          Same platform, same buyers, same countries — so each new sport adds
+          to the account base instead of starting a new one.
+        </p>
+        <Disclosure summary="What is not counted here">
+          A data &amp; medtech line — digital twins, injury prediction and
+          licensed data — sits on top of these figures as optionality. None of
+          it is included in the SAM above.
+        </Disclosure>
+      </Reveal>
     </Section>
   );
 }

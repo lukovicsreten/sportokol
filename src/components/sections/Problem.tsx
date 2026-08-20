@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { Section } from "@/components/ui/Section";
+import { TalentFunnel } from "@/components/ui/TalentFunnel";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { Card } from "@/components/ui/Card";
 import { DeckIcon, IconTile } from "@/components/ui/DeckIcon";
@@ -60,17 +60,8 @@ export function Problem() {
               The Talent Funnel
             </p>
 
-            <div className="reveal mx-auto mt-6 w-full max-w-[280px]">
-              <p className="mb-1 text-center text-xs font-semibold text-slate-light">
-                1,000,000+ players
-              </p>
-              <Image
-                src="/art/talent-funnel.png"
-                alt="Talent funnel narrowing from a million registered players down to a handful of professionals"
-                width={560}
-                height={440}
-                className="h-auto w-full"
-              />
+            <div className="mt-6">
+              <TalentFunnel />
             </div>
           </div>
 

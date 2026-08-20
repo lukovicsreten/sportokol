@@ -4,6 +4,7 @@ import { SectionKicker } from "@/components/ui/SectionKicker";
 import { Card } from "@/components/ui/Card";
 import { IconTile } from "@/components/ui/DeckIcon";
 import { Reveal } from "@/components/ui/Reveal";
+import { NationalTalentMap } from "@/components/illustrations";
 
 const ITEMS = [
   {
@@ -40,6 +41,12 @@ export function Wedge() {
           </p>
         </Reveal>
       </div>
+
+      {/* REPLACE: a real map/product visual of the national database here
+          when one exists; this is an illustration standing in for it. */}
+      <Reveal className="mt-12">
+        <NationalTalentMap className="mx-auto h-auto w-full max-w-md" />
+      </Reveal>
 
       <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-3">
         {ITEMS.map((it, i) => (

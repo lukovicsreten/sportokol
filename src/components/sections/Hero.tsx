@@ -32,9 +32,17 @@ export function Hero() {
             again.
           </h1>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-light">
-            A scout-first platform that turns pitch-side observation into a
-            living, national database of talent.
+          {/* The H1 is the hook; this line says plainly what the product is
+              and who buys it, before any further detail. */}
+          <p className="mt-6 max-w-xl text-xl font-medium leading-snug text-white sm:text-2xl">
+            The pitch-side scouting platform that turns observations into a
+            structured, national talent database for clubs, academies and
+            federations.
+          </p>
+
+          <p className="mt-4 max-w-lg text-base leading-relaxed text-slate-light">
+            No video required. Scouts rate what they see on a phone; every
+            report lands in one comparable database with an AI layer on top.
           </p>
 
           <div
@@ -42,15 +50,16 @@ export function Hero() {
             style={{ animationDelay: "250ms" }}
           >
             {SPORTS.map((s) => (
-              <span
+              <a
                 key={s.label}
-                className="inline-flex items-center gap-2 rounded-full border border-lime/30 bg-lime/10 px-4 py-2 text-sm font-medium text-lime"
+                href="#platform"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-lime/30 bg-lime/10 px-4 text-sm font-medium text-lime transition-all duration-200 hover:scale-[1.04] hover:border-lime hover:bg-lime/20"
               >
                 <DeckIcon name={s.icon} className="h-4 w-4" />
                 {s.label}
-              </span>
+              </a>
             ))}
-            <span className="inline-flex items-center gap-2 rounded-full border border-dashed border-white/25 px-4 py-2 text-sm font-medium text-slate-light">
+            <span className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dashed border-white/25 px-4 text-sm font-medium text-slate-light">
               <DeckIcon name="plus" className="h-3.5 w-3.5" />
               More sports to come
             </span>

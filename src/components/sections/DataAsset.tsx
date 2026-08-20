@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Section } from "@/components/ui/Section";
+import { AthleteProfileDiagram } from "@/components/ui/AthleteProfileDiagram";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 import { DeckIcon } from "@/components/ui/DeckIcon";
 import { Reveal } from "@/components/ui/Reveal";
@@ -85,14 +85,7 @@ export function DataAsset() {
           <p className="mb-4 text-center text-xs font-semibold uppercase tracking-[0.2em] text-lime">
             One profile, built over time
           </p>
-          <Image
-            src="/art/athlete-profile.png"
-            alt="Four coloured data streams — scouts, coaches, medical staff and athletes — converging into a single athlete profile"
-            width={560}
-            height={340}
-            sizes="(max-width: 768px) 100vw, 45vw"
-            className="mx-auto h-auto w-full max-w-md"
-          />
+          <AthleteProfileDiagram />
           <p className="mt-4 text-center text-sm leading-relaxed text-slate-light">
             Every report, note, check-up and self-assessment attaches to the
             same athlete starting from the first trial to professional

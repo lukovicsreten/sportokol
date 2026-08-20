@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { DeckIcon, IconTile } from "@/components/ui/DeckIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
+import { ScoutAtPitch } from "@/components/illustrations";
 
 const STEPS = [
   {
@@ -52,6 +53,12 @@ export function HowItWorks() {
           </p>
         </Reveal>
       </div>
+
+      {/* REPLACE: a real photo of a scout working pitch-side would beat this
+          illustration once one exists. */}
+      <Reveal className="mt-12">
+        <ScoutAtPitch className="mx-auto h-auto w-full max-w-lg" />
+      </Reveal>
 
       <div className="relative mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
         {STEPS.map((s, i) => (

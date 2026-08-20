@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { StructuredData } from "@/components/StructuredData";
+import { ReadingProgress } from "@/components/ui/ReadingProgress";
 import {
   siteUrl,
   siteName,
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        <ReadingProgress />
         <StructuredData />
         {children}
       </body>
