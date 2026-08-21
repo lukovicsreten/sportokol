@@ -50,6 +50,71 @@
   }
 }
 
+@keyframes cta-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(198, 241, 53, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(198, 241, 53, 0);
+  }
+}
+
+/* Resting heartbeat on the single primary action. */
+.cta-pulse {
+  animation: cta-pulse 2.8s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-pulse {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Page loader
+ * ------------------------------------------------------------------------- */
+
+@keyframes loader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/*
+ * Safety net. The overlay is server-rendered so there is no flash before
+ * hydration, which means a JavaScript failure would otherwise leave the site
+ * permanently covered. This forces it away after 8s regardless. In normal
+ * operation the element is removed from the DOM long before this fires.
+ */
+.loader-overlay {
+  animation: loader-failsafe 0.4s ease-out 8s forwards;
+}
+
+/*
+ * Content is only hidden while the loader marks the document. The attribute
+ * is set by JavaScript, so without it the page renders normally rather than
+ * sitting blank.
+ */
+main {
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-loading="true"] main {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-loading="true"] main {
+    transform: none;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--color-ink-950);

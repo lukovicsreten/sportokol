@@ -5,28 +5,44 @@ import { m, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 
 /**
- * Dot-and-line constellation behind dark sections, drifting slower than the
- * page as it scrolls.
+ * Lattice of connected nodes behind dark sections, drifting slower than the
+ * page as it scrolls. Reads as a talent network rather than as decoration.
  *
- * Deterministic layout rather than Math.random(): a random field would differ
- * between the server and client renders and hydrate with a mismatch.
+ * Points sit on a jittered grid and only join their near neighbours. An
+ * earlier version scattered them and linked distant indices, which drew long
+ * diagonals straight across the headline — busy, and it fought the copy.
+ *
+ * The layout is deterministic, not Math.random(): a random field differs
+ * between the server and client renders and hydrates with a mismatch.
  */
-const NODES = Array.from({ length: 34 }, (_, i) => {
-  const gx = (i * 37) % 100;
-  const gy = (i * 61) % 100;
+const COLS = 8;
+const ROWS = 6;
+
+// Small repeating offsets keep the grid from looking mechanical without
+// needing randomness.
+const JITTER_X = [0, 2.4, -1.8, 3.0, -2.2, 1.4, -2.8, 0.9];
+const JITTER_Y = [0, -2.2, 1.8, -1.1, 2.6, -1.6];
+
+const NODES = Array.from({ length: COLS * ROWS }, (_, i) => {
+  const col = i % COLS;
+  const row = Math.floor(i / COLS);
   return {
-    x: gx + ((i % 5) - 2) * 1.4,
-    y: gy + ((i % 3) - 1) * 2.1,
-    r: i % 7 === 0 ? 2.4 : 1.3,
-    lime: i % 7 === 0,
+    x: (col + 0.5) * (100 / COLS) + JITTER_X[(col + row) % JITTER_X.length],
+    y: (row + 0.5) * (100 / ROWS) + JITTER_Y[(row + col) % JITTER_Y.length],
+    lime: (col + row * 3) % 11 === 0,
+    r: (col + row) % 5 === 0 ? 2.2 : 1.2,
   };
 });
 
-const LINKS: [number, number][] = [
-  [0, 5], [5, 11], [11, 16], [2, 8], [8, 14], [14, 21],
-  [3, 9], [9, 18], [18, 25], [6, 13], [13, 20], [20, 28],
-  [7, 15], [15, 23], [23, 30], [10, 17], [17, 26], [26, 33],
-];
+// Join right and down only, so every line is a short grid edge.
+const LINKS: [number, number][] = [];
+for (let row = 0; row < ROWS; row++) {
+  for (let col = 0; col < COLS; col++) {
+    const i = row * COLS + col;
+    if (col < COLS - 1) LINKS.push([i, i + 1]);
+    if (row < ROWS - 1) LINKS.push([i, i + COLS]);
+  }
+}
 
 export function Constellation({
   className,
@@ -56,28 +72,44 @@ export function Constellation({
         preserveAspectRatio="none"
         className="absolute inset-0 h-[125%] w-full"
       >
-        <g stroke="#2A3F63" strokeWidth="0.12" opacity="0.85">
-          {LINKS.map(([a, b], i) => (
-            <line
+        <defs>
+          {/* Thins the lattice out over the left column, where the headline
+              and copy sit, and lets it read at full strength on the right. */}
+          <linearGradient id="lattice-fade" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="white" stopOpacity="0.14" />
+            <stop offset="45%" stopColor="white" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="white" stopOpacity="1" />
+          </linearGradient>
+          <mask id="lattice-mask">
+            <rect width="100" height="100" fill="url(#lattice-fade)" />
+          </mask>
+        </defs>
+
+        <g mask="url(#lattice-mask)">
+          <g stroke="#35507F" strokeWidth="0.14" opacity="0.9">
+            {LINKS.map(([a, b], i) => (
+              <line
+                key={i}
+                x1={NODES[a].x}
+                y1={NODES[a].y}
+                x2={NODES[b].x}
+                y2={NODES[b].y}
+              />
+            ))}
+          </g>
+          {NODES.map((n, i) => (
+            <circle
               key={i}
-              x1={NODES[a].x}
-              y1={NODES[a].y}
-              x2={NODES[b].x}
-              y2={NODES[b].y}
+              cx={n.x}
+              cy={n.y}
+              r={n.r * 0.2}
+              fill={n.lime ? "#C6F135" : "#4A6699"}
+              opacity={n.lime ? 1 : 0.8}
             />
           ))}
         </g>
-        {NODES.map((n, i) => (
-          <circle
-            key={i}
-            cx={n.x}
-            cy={n.y}
-            r={n.r * 0.16}
-            fill={n.lime ? "#C6F135" : "#3E5580"}
-            opacity={n.lime ? 0.9 : 0.65}
-          />
-        ))}
       </m.svg>
+
       {/* Fade the field out toward the bottom so sections meet cleanly. */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink-950" />
     </div>

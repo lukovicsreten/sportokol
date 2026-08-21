@@ -5,6 +5,7 @@ import { MotionRoot } from "@/components/motion/Motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { PageLoader } from "@/components/ui/PageLoader";
 
 // Only the weights the design uses; `swap` renders fallback text immediately
 // rather than blocking paint on the webfont.
@@ -45,6 +46,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <MotionRoot>
+          <PageLoader />
           <CustomCursor />
           <Navbar />
           <main id="main">{children}</main>

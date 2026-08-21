@@ -1,5 +1,6 @@
 import { Hero, GlowEye } from "@/components/ui/Hero";
 import { SportPills } from "@/components/ui/SportPills";
+import { CTAButton } from "@/components/ui/CTAButton";
 import {
   SectionLight,
   EyebrowLabel,
@@ -47,6 +48,16 @@ export default function HomePage() {
         <p className="mt-5 text-sm text-mist">
           Live modules today · sport-agnostic platform, built to extend
         </p>
+        {/* Two routes rather than one: a club wants a demo, everyone else
+            wants to understand the product first. */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <CTAButton href="/contact" pulse>
+            Book a demo
+          </CTAButton>
+          <CTAButton href="/product" variant="secondary">
+            See the product
+          </CTAButton>
+        </div>
       </Hero>
 
       <SectionLight aria-label="The problem">

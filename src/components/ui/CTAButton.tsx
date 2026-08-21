@@ -21,12 +21,15 @@ export function CTAButton({
   variant = "primary",
   className,
   external = false,
+  pulse = false,
 }: {
   href: string;
   children: React.ReactNode;
   variant?: "primary" | "secondary";
   className?: string;
   external?: boolean;
+  /** Adds a resting halo pulse. Reserved for the single main action. */
+  pulse?: boolean;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const [spot, setSpot] = useState({ x: 50, y: 50 });
@@ -55,6 +58,14 @@ export function CTAButton({
 
   const inner = (
     <>
+      {variant === "primary" && pulse && (
+        // Slow halo so the primary action has a heartbeat at rest. Purely
+        // decorative and dropped under reduced motion via the CSS class.
+        <span
+          aria-hidden="true"
+          className="cta-pulse pointer-events-none absolute inset-0 rounded-full"
+        />
+      )}
       {variant === "primary" && (
         <span
           aria-hidden="true"

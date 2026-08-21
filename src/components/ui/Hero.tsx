@@ -60,7 +60,9 @@ export function Hero({
           <TextReveal
             text={headline}
             delay={0.15}
-            className="mt-6 font-display text-[2.75rem] font-extrabold leading-[1.03] tracking-[-0.03em] sm:text-6xl lg:text-7xl xl:text-[5.25rem]"
+            // Roughly a 10% step up at every breakpoint, so the headline keeps
+            // its dominance from phone to wide desktop rather than only on one.
+            className="mt-6 font-display text-[3.05rem] font-extrabold leading-[1.03] tracking-[-0.03em] sm:text-[4.15rem] lg:text-[5rem] xl:text-[5.8rem]"
           />
 
           {subhead && (
