@@ -1,105 +1,68 @@
-import { LogoWordmark } from "./Logo";
-import { DeckIcon } from "./ui/DeckIcon";
-import { CTA, DECK_NAV_LABEL } from "@/lib/cta";
-import { contactEmail, companySite } from "@/lib/site";
-
-const COLUMNS: {
-  heading: string;
-  links: { label: string; href: string }[];
-}[] = [
-  {
-    heading: "Product",
-    links: [
-      { label: "Overview", href: "/product" },
-      { label: "Platform", href: "/product#platform" },
-      { label: "How it works", href: "/product#how-it-works" },
-      { label: "AI layer", href: "/product#ai-layer" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "Team", href: "/investors#team" },
-      { label: "Traction", href: "/investors#traction" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    heading: "Investors",
-    links: [
-      { label: "Overview", href: "/investors" },
-      { label: "The ask", href: "/investors#the-ask" },
-      { label: "Use of funds", href: "/investors#use-of-funds" },
-      { label: DECK_NAV_LABEL, href: CTA.deck.href },
-    ],
-  },
-];
+import Link from "next/link";
+import { Wordmark } from "@/components/brand/Logo";
+import { NAV_LINKS, CONTACT_EMAIL, COMPANY_SITE } from "@/lib/nav";
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-navy-950 text-white">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:px-8 md:grid-cols-[1.3fr_2fr]">
-        <div className="flex flex-col gap-4">
-          <LogoWordmark />
-          <p className="max-w-xs text-lg font-medium leading-snug text-white">
+    <footer className="grain relative overflow-hidden border-t border-white/10 bg-ink-950 text-white">
+      <div className="relative z-[2] mx-auto grid max-w-7xl gap-10 px-6 py-16 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <Wordmark />
+          <p className="mt-5 max-w-xs text-lg font-semibold leading-snug">
             An eye on all the talent in the{" "}
             <span className="text-lime">country.</span>
           </p>
-          <div className="mt-1 flex flex-col gap-1">
-            <a
-              href={`mailto:${contactEmail}`}
-              className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-slate-light hover:text-white"
-            >
-              <DeckIcon name="chat" className="h-4 w-4 shrink-0 text-lime" />
-              {contactEmail}
-            </a>
-            <a
-              href={companySite}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-slate-light hover:text-white"
-            >
-              <DeckIcon name="globe-alt" className="h-4 w-4 shrink-0 text-lime" />
-              smsolutions.ai
-            </a>
-          </div>
         </div>
 
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-          {COLUMNS.map((col) => (
-            <div key={col.heading}>
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-lime">
-                {col.heading}
-              </h2>
-              <ul className="mt-3 flex flex-col">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="flex min-h-11 w-full items-center text-sm text-slate-light hover:text-white"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <nav aria-label="Footer">
+          <h2 className="text-xs font-bold uppercase tracking-[0.24em] text-lime">
+            Navigate
+          </h2>
+          <ul className="mt-4 flex flex-col">
+            {NAV_LINKS.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className="flex min-h-11 w-full items-center text-sm text-mist transition-colors hover:text-white"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
+
+        <div>
+          <h2 className="text-xs font-bold uppercase tracking-[0.24em] text-lime">
+            Contact
+          </h2>
+          <ul className="mt-4 flex flex-col">
+            <li>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="flex min-h-11 w-full items-center text-sm text-mist transition-colors hover:text-white"
+              >
+                {CONTACT_EMAIL}
+              </a>
+            </li>
+            <li>
+              <a
+                href={COMPANY_SITE}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-h-11 w-full items-center text-sm text-mist transition-colors hover:text-white"
+              >
+                smsolutions.ai
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-slate-light sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <p>&copy; 2026 Sportokol / SM Solutions. All rights reserved.</p>
-          <div className="flex flex-wrap items-center gap-x-5">
-            <a
-              href="/privacy"
-              className="inline-flex min-h-11 items-center hover:text-white"
-            >
-              Privacy Policy
-            </a>
-            <span>Backed by SMART START &middot; Innovation Fund</span>
-          </div>
+      <div className="relative z-[2] border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-mist sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <p>&copy; {new Date().getFullYear()} Sportokol. All rights reserved.</p>
+          <p>Backed by SMART START &middot; Innovation Fund</p>
         </div>
       </div>
     </footer>

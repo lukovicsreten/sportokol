@@ -1,128 +1,214 @@
 "use client";
 
-
-import { Section } from "@/components/ui/Section";
-import { SectionKicker } from "@/components/ui/SectionKicker";
-import { Card } from "@/components/ui/Card";
-import { DeckIcon, IconTile } from "@/components/ui/DeckIcon";
-import { Badge } from "@/components/ui/Badge";
-import { Reveal } from "@/components/ui/Reveal";
-import { ScoutAtPitch } from "@/components/illustrations";
+import { useRef, useState } from "react";
+import { m, useScroll, useMotionValueEvent } from "framer-motion";
+import { EyebrowLabel, TextReveal, LeadParagraph } from "@/components/ui/primitives";
+import { IconBadge } from "@/components/ui/cards";
+import { Callout } from "@/components/sections/shared";
+import { FloatingMotes } from "@/components/ui/Backdrop";
+import { useMotionPrefs } from "@/lib/useMotionPrefs";
+import { cn } from "@/lib/cn";
 
 const STEPS = [
   {
-    icon: "clipboard-check",
-    step: "1",
+    n: "01",
     title: "Capture",
-    body: "Scouts record what they see at training or matches mobile, pitch-side, no film crew, any sport.",
-    tags: ["Technical", "Physical", "Mental", "Free-text notes"],
+    body: "Scouts record what they see at training or matches, mobile, pitch-side, no film crew, any sport.",
+    listLabel: "What the scout enters",
+    items: ["Technical", "Physical", "Mental", "Free-text notes"],
   },
   {
-    icon: "database",
-    step: "2",
+    n: "02",
     title: "Structure",
-    body: "Every report lands in one live database comparable and trackable across scouts, months and seasons.",
-    tags: ["Sport", "Age", "Position"],
+    body: "Every report lands in one live database, comparable and trackable across scouts, months and seasons.",
+    listLabel: "Becomes a filterable player index",
+    items: ["Sport", "Age", "Position"],
     note: "Real-time · auto-enriched by open public APIs",
   },
   {
-    icon: "brain",
-    step: "3",
+    n: "03",
     title: "Intelligence",
     body: "AI turns raw reports into decisions, trained on the methodology of pro scouts, coaches and players.",
-    bullets: [
-      "Player assessment - scores, strengths, gaps, trajectory, rec.",
+    listLabel: "What the AI produces",
+    items: [
+      "Player assessment — scores, strengths, gaps, trajectory, rec.",
       "Ask-anything queries across the whole pool",
     ],
   },
 ];
 
-export function HowItWorks() {
+function StepPanel({
+  step,
+  active,
+}: {
+  step: (typeof STEPS)[number];
+  active: boolean;
+}) {
   return (
-    <Section id="how-it-works" aria-label="How it works">
-      <div className="mx-auto max-w-3xl text-center">
-        <Reveal className="flex flex-col items-center">
-          <SectionKicker>How It Works</SectionKicker>
-          <h2 className="balance text-3xl font-bold tracking-tight text-ink sm:text-4xl md:text-5xl">
-            From a pitch-side note to a decision, in one flow
-          </h2>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-graphite">
-            Three steps, one system built so a scout barely changes their
-            routine, and every observation compounds into something a club
-            can act on.
-          </p>
-        </Reveal>
+    <div
+      className={cn(
+        "rounded-2xl border p-7 transition-all duration-500 sm:p-8",
+        active
+          ? "border-lime/50 bg-white/[0.06] opacity-100 shadow-[0_24px_70px_-30px_rgba(198,241,53,0.45)]"
+          : "border-white/10 bg-white/[0.02] opacity-45"
+      )}
+    >
+      <div className="flex items-center gap-4">
+        <IconBadge
+          className={cn(
+            "transition-colors duration-500",
+            active && "border-lime bg-lime text-ink-950"
+          )}
+        >
+          <span className="text-sm font-extrabold">{step.n}</span>
+        </IconBadge>
+        <h3 className="font-display text-2xl font-extrabold">{step.title}</h3>
       </div>
-
-      {/* REPLACE: a real photo of a scout working pitch-side would beat this
-          illustration once one exists. */}
-      <Reveal className="mt-12">
-        <ScoutAtPitch className="mx-auto h-auto w-full max-w-lg" />
-      </Reveal>
-
-      <div className="relative mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
-        {STEPS.map((s, i) => (
-          <div key={s.title} className="relative">
-            <Card delay={i * 0.1} className="h-full">
-              <div className="flex items-start justify-between">
-                <IconTile name={s.icon} dark={false} />
-                <span className="text-3xl font-bold text-black/[0.08]">
-                  {s.step}
-                </span>
-              </div>
-              <h3 className="text-lg font-semibold text-ink">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-graphite">
-                {s.body}
-              </p>
-
-              {s.tags && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {s.tags.map((t) => (
-                    <Badge key={t} tone="white" variant="outline" className="px-3 py-1 text-xs">
-                      {t}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-              {s.note && (
-                <p className="mt-3 text-xs font-medium text-graphite">
-                  {s.note}
-                </p>
-              )}
-              {s.bullets && (
-                <ul className="mt-4 space-y-2">
-                  {s.bullets.map((b) => (
-                    <li
-                      key={b}
-                      className="flex gap-2 text-sm leading-relaxed text-graphite"
-                    >
-                      <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-lime" />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Card>
-
-            {i < STEPS.length - 1 && (
-              <div className="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center md:flex">
-                <DeckIcon name="arrow-right" className="h-6 w-6 text-lime-ink" />
-              </div>
-            )}
-          </div>
+      <p className="mt-4 text-[15px] leading-relaxed text-mist">{step.body}</p>
+      <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-lime">
+        {step.listLabel}
+      </p>
+      <ul className="mt-3 flex flex-wrap gap-2">
+        {step.items.map((t) => (
+          <li
+            key={t}
+            className="rounded-full bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-mist"
+          >
+            {t}
+          </li>
         ))}
+      </ul>
+      {step.note && <p className="mt-3 text-xs text-mist">{step.note}</p>}
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <>
+      <EyebrowLabel>How it works</EyebrowLabel>
+      <TextReveal
+        as="h2"
+        trigger="scroll"
+        text="From a pitch-side note to a decision, in **one flow**"
+        className="mt-6 font-display text-4xl font-extrabold tracking-[-0.02em] sm:text-5xl"
+      />
+      <LeadParagraph className="mt-5 max-w-xl text-lg leading-relaxed text-mist">
+        Three steps, one system built so a scout barely changes their routine,
+        and every observation compounds into something a club can act on.
+      </LeadParagraph>
+    </>
+  );
+}
+
+const MOAT = (
+  <Callout lead="The moat is the data.">
+    Proprietary observational data no video-based incumbent can reach — also
+    enriched by public feeds, trained by professionals, and compounding with
+    every single report.
+  </Callout>
+);
+
+/**
+ * Pinned variant.
+ *
+ * Split into its own component on purpose: `useScroll` binds to whatever the
+ * ref holds on the render it first runs. When this lived in the parent
+ * alongside the plain-list branch, the ref was still null on the first render
+ * (the parent starts un-pinned so server and client agree), the hook never
+ * attached to the track, and the step index stayed on 01 forever. Mounting
+ * this only once the pinned markup exists means the ref is populated from its
+ * very first render.
+ */
+function PinnedSteps() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const next = Math.min(STEPS.length - 1, Math.floor(v * STEPS.length));
+    setIndex((prev) => (prev === next ? prev : next));
+  });
+
+  return (
+    <section
+      id="how-it-works"
+      aria-label="How it works"
+      className="grain relative bg-ink-950 text-white"
+    >
+      <div ref={trackRef} className="relative h-[280vh]">
+        <div className="sticky top-0 flex min-h-screen items-center overflow-hidden">
+          <FloatingMotes />
+          <div className="relative z-[2] mx-auto grid w-full max-w-7xl gap-14 px-6 py-24 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div>
+              <Header />
+              <div className="mt-9 flex gap-2" aria-hidden="true">
+                {STEPS.map((s, i) => (
+                  <span
+                    key={s.n}
+                    className={cn(
+                      "h-1 flex-1 rounded-full transition-colors duration-500",
+                      i <= index ? "bg-lime" : "bg-white/12"
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {STEPS.map((s, i) => (
+                <StepPanel key={s.n} step={s} active={i === index} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <Reveal className="mt-10">
-        <div className="rounded-2xl bg-navy-950 px-6 py-8 text-center sm:px-10">
-          <p className="balance text-lg leading-relaxed text-white sm:text-xl">
-            <span className="font-bold text-lime">The moat is the data.</span>{" "}
-            Proprietary observational data no video-based incumbent can reach
-            also enriched by public feeds, trained by professionals, and
-            compounding with every single report.
-          </p>
-        </div>
-      </Reveal>
-    </Section>
+      <div className="relative z-[2] mx-auto max-w-7xl px-6 pb-28 sm:px-8 md:pb-36">
+        {MOAT}
+      </div>
+    </section>
   );
+}
+
+/**
+ * Plain stacked variant for touch and reduced motion. A pinned section on a
+ * phone fights the user's own scrolling, so it is not used there at all.
+ */
+function StackedSteps() {
+  return (
+    <section
+      id="how-it-works"
+      aria-label="How it works"
+      className="grain relative overflow-hidden bg-ink-950 py-28 text-white md:py-36"
+    >
+      <FloatingMotes />
+      <div className="relative z-[2] mx-auto max-w-7xl px-6 sm:px-8">
+        <Header />
+        <div className="mt-12 space-y-5">
+          {STEPS.map((s, i) => (
+            <m.div
+              key={s.n}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.6, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <StepPanel step={s} active />
+            </m.div>
+          ))}
+        </div>
+        <div className="mt-14">{MOAT}</div>
+      </div>
+    </section>
+  );
+}
+
+export function HowItWorks() {
+  const { rich } = useMotionPrefs();
+  return rich ? <PinnedSteps /> : <StackedSteps />;
 }

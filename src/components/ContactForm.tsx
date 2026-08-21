@@ -1,97 +1,83 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { contactEmail } from "@/lib/site";
+import { m, AnimatePresence } from "@/components/motion/Motion";
+import { CONTACT_EMAIL } from "@/lib/nav";
+import { cn } from "@/lib/cn";
 
-type Audience =
-  | "Club / Academy"
-  | "Agency"
-  | "Federation"
-  | "Investor"
-  | "Other";
-
-const AUDIENCES: Audience[] = [
-  "Club / Academy",
+const AUDIENCES = [
+  "Club",
+  "Academy",
   "Agency",
   "Federation",
   "Investor",
   "Other",
-];
+] as const;
 
-/** ?type= maps onto a pre-selected audience and a tailored prompt. */
-const PRESETS: Record<
-  string,
-  { audience: Audience; subject: string; placeholder: string }
-> = {
-  demo: {
-    audience: "Club / Academy",
-    subject: "Demo request",
-    placeholder:
-      "Tell us about your club and what you'd like to see in a demo — sport, age groups, squad size.",
-  },
-  investor: {
-    audience: "Investor",
-    subject: "Investor inquiry",
-    placeholder:
-      "Tell us a little about your fund or angel activity and what you'd like to discuss.",
-  },
-  scout: {
-    audience: "Other",
-    subject: "Early access — Scout",
-    placeholder: "Tell us what you scout and where.",
-  },
-};
+const FIELD = cn(
+  "w-full rounded-xl border border-white/12 bg-white/[0.04] px-4 py-3.5 text-sm text-white",
+  "placeholder:text-mist/60 backdrop-blur-md transition-shadow duration-200",
+  "focus:border-lime/60 focus:outline-none focus:shadow-[0_0_0_4px_rgba(198,241,53,0.14)]"
+);
 
-const FIELD =
-  "w-full rounded-lg border border-black/10 bg-white px-4 py-3 text-sm text-ink placeholder:text-graphite/70 focus:border-lime-ink focus:outline-none focus-visible:outline-none";
+type Status = "idle" | "sending" | "sent";
 
+/**
+ * Glass-morphism contact form.
+ *
+ * TODO: replace the mailto handoff with a real handler (Resend, Formspree, or
+ * a route handler) once a backend exists. Until then submitting composes the
+ * message and hands it to the visitor's mail client — nothing is transmitted
+ * to or stored by this site, and the form says so.
+ *
+ * The button's "sending" state is a short, honest beat while the mail client
+ * is being opened, not a fake upload. The confirmation says the draft was
+ * opened, because that is all that actually happened.
+ */
 export function ContactForm() {
-  const params = useSearchParams();
-  const preset = PRESETS[params.get("type") ?? ""] ?? null;
+  const [audience, setAudience] = useState<string>("Club");
+  const [status, setStatus] = useState<Status>("idle");
 
-  const [audience, setAudience] = useState<Audience>(
-    preset?.audience ?? "Club / Academy"
-  );
-
-  /*
-   * TODO: replace mailto fallback with a real form handler (e.g. Resend or
-   * Formspree) when a backend is ready. Until then the submit composes the
-   * message and hands it to the visitor's mail client — nothing is collected
-   * or stored by this site.
-   */
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = String(data.get("name") ?? "");
-    const email = String(data.get("email") ?? "");
-    const message = String(data.get("message") ?? "");
+    if (status !== "idle") return;
 
-    const subject = `${preset?.subject ?? "Website enquiry"} — ${audience}`;
+    const data = new FormData(e.currentTarget);
+    const subject = `Website enquiry — ${audience}`;
     const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
+      `Name: ${data.get("name") ?? ""}`,
+      `Email: ${data.get("email") ?? ""}`,
+      `Company: ${data.get("company") ?? ""}`,
       `I am a: ${audience}`,
       "",
-      message,
+      String(data.get("message") ?? ""),
     ].join("\n");
 
-    window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(
+    setStatus("sending");
+    const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
+
+    window.setTimeout(() => {
+      window.location.href = href;
+      setStatus("sent");
+    }, 700);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-3xl border border-white/12 bg-white/[0.045] p-6 backdrop-blur-xl sm:p-8"
+    >
+      <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">
+          <label htmlFor="name" className="mb-2 block text-sm font-semibold">
             Name
           </label>
           <input id="name" name="name" required autoComplete="name" className={FIELD} />
         </div>
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-medium text-ink">
+          <label htmlFor="email" className="mb-2 block text-sm font-semibold">
             Email
           </label>
           <input
@@ -105,18 +91,30 @@ export function ContactForm() {
         </div>
       </div>
 
-      <fieldset>
-        <legend className="mb-2 text-sm font-medium text-ink">I am a…</legend>
+      <div className="mt-5">
+        <label htmlFor="company" className="mb-2 block text-sm font-semibold">
+          Company
+        </label>
+        <input
+          id="company"
+          name="company"
+          autoComplete="organization"
+          className={FIELD}
+        />
+      </div>
+
+      <fieldset className="mt-6">
+        <legend className="mb-3 text-sm font-semibold">I am a…</legend>
         <div className="flex flex-wrap gap-2">
           {AUDIENCES.map((a) => (
             <label
               key={a}
-              className={
-                "inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 text-sm font-medium transition-colors " +
-                (audience === a
-                  ? "border-lime-ink bg-lime-ink/10 text-lime-ink"
-                  : "border-black/10 bg-white text-graphite hover:border-lime-ink/40")
-              }
+              className={cn(
+                "inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 text-sm font-semibold transition-colors",
+                audience === a
+                  ? "border-lime bg-lime/15 text-lime"
+                  : "border-white/15 text-mist hover:border-lime/40 hover:text-white"
+              )}
             >
               <input
                 type="radio"
@@ -132,8 +130,8 @@ export function ContactForm() {
         </div>
       </fieldset>
 
-      <div>
-        <label htmlFor="message" className="mb-2 block text-sm font-medium text-ink">
+      <div className="mt-6">
+        <label htmlFor="message" className="mb-2 block text-sm font-semibold">
           Message
         </label>
         <textarea
@@ -141,22 +139,87 @@ export function ContactForm() {
           name="message"
           rows={5}
           required
-          placeholder={
-            preset?.placeholder ?? "What would you like to talk about?"
-          }
+          placeholder="What would you like to talk about?"
           className={FIELD}
         />
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <button
+      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <m.button
           type="submit"
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-navy-950 px-6 text-sm font-semibold text-lime transition-all duration-200 hover:scale-[1.02] hover:brightness-125"
+          disabled={status !== "idle"}
+          whileHover={status === "idle" ? { scale: 1.03 } : undefined}
+          whileTap={status === "idle" ? { scale: 0.98 } : undefined}
+          transition={{ type: "spring", stiffness: 340, damping: 22 }}
+          className={cn(
+            "relative inline-flex min-h-12 min-w-[11rem] items-center justify-center gap-2 overflow-hidden rounded-full px-7 text-sm font-bold",
+            "transition-colors duration-300",
+            status === "sent"
+              ? "bg-lime text-ink-950"
+              : "bg-lime text-ink-950 hover:shadow-[0_12px_44px_-10px_rgba(198,241,53,0.7)]",
+            status !== "idle" && "cursor-default"
+          )}
         >
-          Send message
-        </button>
-        <p className="text-xs leading-relaxed text-graphite">
-          Opens in your email app — nothing is stored by this site.
+          <AnimatePresence mode="wait" initial={false}>
+            {status === "idle" && (
+              <m.span
+                key="idle"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18 }}
+              >
+                Send message
+              </m.span>
+            )}
+            {status === "sending" && (
+              <m.span
+                key="sending"
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.7 }}
+                transition={{ duration: 0.18 }}
+                className="flex items-center gap-2"
+              >
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-ink-950/25 border-t-ink-950" />
+                Opening…
+              </m.span>
+            )}
+            {status === "sent" && (
+              <m.span
+                key="sent"
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 420, damping: 18 }}
+                className="flex items-center gap-2"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <m.path
+                    d="M4 12.5 L9.5 18 L20 6.5"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                  />
+                </svg>
+                Draft opened
+              </m.span>
+            )}
+          </AnimatePresence>
+        </m.button>
+
+        <p className="text-xs leading-relaxed text-mist" aria-live="polite">
+          {status === "sent"
+            ? "Your email app should be open with the message ready to send."
+            : "Opens in your email app — nothing is stored by this site."}
         </p>
       </div>
     </form>

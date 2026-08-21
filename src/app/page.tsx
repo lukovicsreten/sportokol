@@ -1,38 +1,127 @@
-import dynamic from "next/dynamic";
-import { Hero } from "@/components/sections/Hero";
+import { Hero, GlowEye } from "@/components/ui/Hero";
+import { SportPills } from "@/components/ui/SportPills";
+import {
+  SectionLight,
+  EyebrowLabel,
+  Reveal,
+  RevealGrid,
+  RevealItem,
+} from "@/components/ui/primitives";
+import { Card, CountUp } from "@/components/ui/cards";
+import { TractionBar, ClosingCta } from "@/components/sections/shared";
+import { HowItWorks } from "@/components/sections/HowItWorks";
 
-// Below-the-fold sections are code-split; SSR stays on for SEO.
-const Problem = dynamic(() =>
-  import("@/components/sections/Problem").then((m) => m.Problem)
-);
-const HowItWorks = dynamic(() =>
-  import("@/components/sections/HowItWorks").then((m) => m.HowItWorks)
-);
-const TractionStrip = dynamic(() =>
-  import("@/components/sections/home/TractionStrip").then((m) => m.TractionStrip)
-);
-const MarketSnapshot = dynamic(() =>
-  import("@/components/sections/home/MarketSnapshot").then(
-    (m) => m.MarketSnapshot
-  )
-);
-const HomeCta = dynamic(() =>
-  import("@/components/sections/home/HomeCta").then((m) => m.HomeCta)
-);
+const PROBLEMS = [
+  {
+    title: "The best talent is invisible to the tools that exist",
+    body: "Youth & grassroots are barely filmed, so video-based incumbents (Wyscout, Hudl) have nothing to work with.",
+    fix: "Captures pitch-side observation and no video needed.",
+  },
+  {
+    title: "Talent is selected by birthday, not ability",
+    body: "The relative-age effect skews selection ~90/10 toward early-born kids at age 6; late developers are lost for good.",
+    fix: "Tracks development over time to catch the late bloomers.",
+  },
+  {
+    title: "Evaluation is subjective and never pooled",
+    body: "Scouts (un)consciously rate older, bigger kids higher, with no shared framework to compare players fairly.",
+    fix: "One shared framework for every player comparable.",
+  },
+  {
+    title: "Knowledge walks out the door",
+    body: "Scouting still lives in notebooks, spreadsheets and PDFs, when a scout leaves, years of context leave too.",
+    fix: "One owned database, a memory that compounds.",
+  },
+];
 
-/**
- * Home is a hub: enough to understand the product and believe it works, then
- * a route onward. The long-form content lives on /product and /investors.
- */
-export default function Home() {
+export default function HomePage() {
   return (
     <>
-      <Hero />
-      <Problem variant="compact" />
+      <Hero
+        eyebrow="Sports management systems"
+        headline="Never lose a future **professional** again."
+        subhead="A scout-first platform that turns pitch-side observation into a living, national database of talent."
+        aside={<GlowEye />}
+      >
+        <SportPills />
+        <p className="mt-5 text-sm text-mist">
+          Live modules today · sport-agnostic platform, built to extend
+        </p>
+      </Hero>
+
+      <SectionLight aria-label="The problem">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <div className="flex justify-center">
+            <EyebrowLabel dark={false}>The problem</EyebrowLabel>
+          </div>
+          <h2 className="balance mt-6 font-display text-4xl font-extrabold tracking-[-0.02em] text-ink-950 sm:text-5xl">
+            An industry that loses talent it can&rsquo;t see, measure or
+            remember
+          </h2>
+          <p className="mt-5 text-lg leading-relaxed text-slate">
+            Youth football runs the most expensive talent funnel in sport
+            almost blindly — on video that doesn&rsquo;t exist, judgement that
+            isn&rsquo;t shared, and records that leave when people do.
+          </p>
+        </Reveal>
+
+        <div className="mt-16 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <Reveal className="rounded-2xl bg-ink-950 p-8 text-white">
+            <p className="font-display text-6xl font-extrabold tracking-tight text-lime">
+              <CountUp value={4} suffix="%" />
+            </p>
+            <p className="mt-2 text-sm font-bold uppercase tracking-[0.16em] text-white">
+              reach the top tier
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-mist">
+              of academy prospects make it — the other 96% are filtered out,
+              most never systematically tracked along the way.
+            </p>
+            <div className="mt-8 border-t border-white/10 pt-6">
+              <p className="font-display text-4xl font-extrabold tracking-tight text-lime">
+                <CountUp value={55} suffix="%" />
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-mist">
+                of released academy players show clinical distress within 3
+                weeks.
+              </p>
+            </div>
+          </Reveal>
+
+          <RevealGrid className="grid gap-5 sm:grid-cols-2">
+            {PROBLEMS.map((p, i) => (
+              <RevealItem key={p.title} index={i}>
+                <Card dark={false} className="h-full">
+                  <h3 className="font-display text-base font-extrabold leading-snug text-ink-950">
+                    {p.title}
+                  </h3>
+                  <p className="mt-2.5 text-sm leading-relaxed text-slate">
+                    {p.body}
+                  </p>
+                  <p className="mt-4 border-t border-ink-950/5 pt-3.5 text-sm font-semibold leading-relaxed text-ink-950">
+                    <span className="text-lime-deep">→ </span>
+                    {p.fix}
+                  </p>
+                </Card>
+              </RevealItem>
+            ))}
+          </RevealGrid>
+        </div>
+
+        <Reveal className="mt-12 rounded-2xl bg-ink-950 px-6 py-9 text-center sm:px-10">
+          <p className="balance mx-auto max-w-3xl text-lg leading-relaxed text-white sm:text-xl">
+            <span className="font-display text-2xl font-extrabold text-lime sm:text-3xl">
+              <CountUp value={1000000} suffix="+" />
+            </span>{" "}
+            registered players in Spain alone and most are never systematically
+            scouted, compared, or tracked over time.
+          </p>
+        </Reveal>
+      </SectionLight>
+
       <HowItWorks />
-      <TractionStrip />
-      <MarketSnapshot />
-      <HomeCta />
+      <TractionBar />
+      <ClosingCta />
     </>
   );
 }

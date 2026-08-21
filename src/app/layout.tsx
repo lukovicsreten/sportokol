@@ -1,99 +1,55 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import { StructuredData } from "@/components/StructuredData";
-import { ReadingProgress } from "@/components/ui/ReadingProgress";
+import { MotionRoot } from "@/components/motion/Motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import {
-  siteUrl,
-  siteName,
-  siteTitle,
-  siteDescription,
-  siteKeywords,
-} from "@/lib/site";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
-// Only the weights the design actually uses are requested, and `swap` renders
-// fallback text immediately instead of blocking on the webfont.
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Only the weights the design uses; `swap` renders fallback text immediately
+// rather than blocking paint on the webfont.
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
   title: {
-    default: siteTitle,
-    template: `%s | ${siteName}`,
+    default: "Sportokol — Never lose a future professional again",
+    template: "%s | Sportokol",
   },
-  description: siteDescription,
-  keywords: siteKeywords,
-  authors: [{ name: siteName }],
-  creator: siteName,
-  publisher: siteName,
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: siteTitle,
-    description: siteDescription,
-    url: siteUrl,
-    siteName,
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteTitle,
-    description: siteDescription,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
-  icons: {
-    icon: [
-      { url: "/brand/mark.png", sizes: "256x256", type: "image/png" },
-      { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
-    ],
-    apple: [{ url: "/brand/icon-192.png", sizes: "192x192" }],
-  },
-  manifest: "/manifest.webmanifest",
-  category: "technology",
-  formatDetection: { telephone: false },
+  description:
+    "A scout-first platform that turns pitch-side observation into a living, national database of talent. Built for clubs, academies, agencies and federations.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B1220",
+  themeColor: "#0A1628",
   colorScheme: "dark",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-navy-950">
+    <html lang="en" className={manrope.variable}>
+      <body className="min-h-dvh">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-lime focus:px-4 focus:py-2 focus:font-semibold focus:text-navy-950"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-lime focus:px-4 focus:py-2 focus:font-bold focus:text-ink-950"
         >
           Skip to content
         </a>
-        <ReadingProgress />
-        <StructuredData />
-        <Navbar />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <MotionRoot>
+          <CustomCursor />
+          <Navbar />
+          <main id="main">{children}</main>
+          <Footer />
+        </MotionRoot>
       </body>
     </html>
   );

@@ -1,71 +1,74 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { PageHero } from "@/components/ui/PageHero";
+import { Constellation } from "@/components/ui/Constellation";
+import { Reveal, TextReveal } from "@/components/ui/primitives";
 import { ContactForm } from "@/components/ContactForm";
-import { DeckIcon } from "@/components/ui/DeckIcon";
-import { contactEmail, companySite } from "@/lib/site";
+import { CONTACT_EMAIL, COMPANY_SITE } from "@/lib/nav";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Get in touch",
   description:
-    "Talk to Sportokol — book a demo for your club, academy or agency, request the investor deck, or ask a question.",
-  alternates: { canonical: "/contact" },
+    "Talk to Sportokol — as a club, academy, agency or federation ready to stop losing talent, or as an investor backing the infrastructure layer of sports.",
 };
 
 export default function ContactPage() {
   return (
-    <>
-      <PageHero
-        kicker="Contact"
-        title={<>Let&rsquo;s talk</>}
-        lead="Whether you're a club ready to stop losing talent, or an investor backing the infrastructure layer of sports — we'd love to hear from you."
+    <section className="grain relative overflow-hidden bg-ink-950 pb-28 pt-36 md:pb-36">
+      <Constellation strength={80} />
+      <div
+        aria-hidden="true"
+        className="animate-eye-glow absolute left-1/2 top-24 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-lime/15 blur-[130px]"
       />
 
-      <section
-        aria-label="Contact form"
-        className="bg-offwhite px-6 py-16 sm:px-8 md:py-20"
-      >
-        <div className="mx-auto max-w-3xl">
-          <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-[0_1px_2px_rgba(15,27,46,0.04),0_24px_48px_-24px_rgba(15,27,46,0.16)] sm:p-8">
-            {/* useSearchParams needs a Suspense boundary to keep this route
-                statically prerendered. */}
-            <Suspense
-              fallback={
-                <div className="h-96 animate-pulse rounded-lg bg-black/5" />
-              }
-            >
-              <ContactForm />
-            </Suspense>
-          </div>
-
-          <div className="mt-10 border-t border-black/10 pt-8">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-graphite">
-              Or reach us directly
-            </h2>
-            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-8">
-              <a
-                href={`mailto:${contactEmail}`}
-                className="inline-flex min-h-11 w-fit items-center gap-2 text-base font-medium text-ink hover:text-lime-ink"
-              >
-                <DeckIcon name="chat" className="h-4 w-4 shrink-0 text-lime-ink" />
-                {contactEmail}
-              </a>
-              <a
-                href={companySite}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 w-fit items-center gap-2 text-base font-medium text-ink hover:text-lime-ink"
-              >
-                <DeckIcon
-                  name="globe-alt"
-                  className="h-4 w-4 shrink-0 text-lime-ink"
-                />
-                smsolutions.ai
-              </a>
-            </div>
-          </div>
+      <div className="relative z-[2] mx-auto max-w-3xl px-6 sm:px-8">
+        <div className="text-center">
+          <TextReveal
+            text="An eye on all the talent in the **country.**"
+            className="font-display text-4xl font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-6xl"
+          />
+          <Reveal delay={0.3}>
+            <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-mist">
+              Talk to us — as a club, academy, agency or federation ready to
+              stop losing talent, or as an investor backing the infrastructure
+              layer of sports.
+            </p>
+          </Reveal>
         </div>
-      </section>
-    </>
+
+        <Reveal delay={0.15} className="mt-14">
+          <ContactForm />
+        </Reveal>
+
+        <Reveal className="mt-12 grid gap-4 border-t border-white/10 pt-10 sm:grid-cols-2">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-lime">
+              Web
+            </p>
+            <a
+              href={COMPANY_SITE}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex min-h-11 items-center text-base font-semibold hover:text-lime"
+            >
+              smsolutions.ai
+            </a>
+          </div>
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-lime">
+              Email
+            </p>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="mt-2 inline-flex min-h-11 items-center text-base font-semibold hover:text-lime"
+            >
+              {CONTACT_EMAIL}
+            </a>
+          </div>
+        </Reveal>
+
+        <p className="mt-12 text-center text-xs text-mist">
+          Backed by SMART START &middot; Innovation Fund
+        </p>
+      </div>
+    </section>
   );
 }

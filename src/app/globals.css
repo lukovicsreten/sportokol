@@ -1,420 +1,102 @@
 @import "tailwindcss";
 
-/*
- * Design tokens. Declared in `@theme` (not `@theme inline`) so Tailwind both
- * generates the utilities (bg-navy-950, text-lime, …) and exposes the values
- * as CSS custom properties for hand-written rules.
+/**
+ * Sportokol design tokens.
+ *
+ * Two surfaces only — deep navy and near-white — with a single electric-lime
+ * accent. Anything that needs emphasis uses the lime; nothing else competes.
  */
 @theme {
-  --color-navy-950: #0b1220;
-  --color-navy-900: #0f1b2e;
-  --color-navy-800: #141f35;
+  --color-ink-950: #0a1628;
+  --color-ink-900: #0d1420;
+  --color-ink-800: #111d33;
+  --color-ink-700: #16243d;
+
   --color-lime: #c6f135;
-  --color-lime-dim: rgba(198, 241, 53, 0.15);
-  /* Same hue as --color-lime, darkened until it clears WCAG AA (5.35:1) on
-     the light surfaces. The bright lime is 1.3:1 there — unreadable. */
-  --color-lime-ink: #566e08;
-  --color-offwhite: #f4f6fa;
-  --color-slate-light: #aab4c8;
-  --color-ink: #0f1b2e;
-  --color-graphite: #5b6b85;
+  /* Same hue, darkened until it clears WCAG AA on the light surface, where
+     the bright lime sits at ~1.3:1 and is unreadable. */
+  --color-lime-deep: #566e08;
 
-  --animate-float: float 6s ease-in-out infinite;
+  --color-paper: #f5f7fa;
+  --color-mist: #aab8cc;
+  --color-slate: #5b6b85;
+
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-eye-glow: eye-glow 4s ease-in-out infinite;
+  --animate-drift: drift 7s ease-in-out infinite;
 }
 
-/* next/font injects these at runtime, so they must resolve inline. */
-@theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-}
-
-@keyframes float {
+@keyframes eye-glow {
   0%,
   100% {
-    transform: translateY(0px);
+    opacity: 0.35;
+    transform: scale(1);
   }
   50% {
-    transform: translateY(-14px);
+    opacity: 0.7;
+    transform: scale(1.08);
   }
 }
 
-/*
- * Hero reveal. Pure CSS so the above-the-fold content paints on first frame
- * without waiting for JS/hydration — keeps LCP fast and the page readable
- * even if the JS bundle never arrives.
- */
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
+@keyframes drift {
+  0%,
+  100% {
     transform: translateY(0);
   }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.rise-in {
-  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.scale-in {
-  animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/*
- * The page is ~32,000px of server-rendered markup, so the browser was laying
- * out every section before it could paint the hero — Lighthouse measured 3.5s
- * of LCP "render delay" against 1.2s of style & layout.
- *
- * `content-visibility: auto` lets it skip layout and paint for sections that
- * are still off-screen. `contain-intrinsic-size` supplies a placeholder height
- * so the scrollbar stays stable (the `auto` keyword makes Chrome remember each
- * section's real height once measured, so scroll position never jumps).
- */
-@keyframes draw-line {
-  from {
-    stroke-dashoffset: 620;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Streams draw themselves toward the hub as the section scrolls in. Where
-   scroll timelines are unsupported the lines are simply already drawn. */
-.stream-line {
-  stroke-dasharray: 620;
-  stroke-dashoffset: 0;
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .stream-line {
-      animation: draw-line linear both;
-      animation-timeline: view();
-      animation-range: entry 10% entry calc(80% + var(--reveal-delay, 0%));
-    }
-  }
-}
-
-@keyframes funnel-in {
-  from {
-    opacity: 0;
-    transform: scaleX(0.25);
-  }
-  to {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes survivor-in {
-  from {
-    opacity: 0;
-    transform: translateY(-18px) scale(0.3);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Funnel layers narrow in from the centre; the surviving mark drops through
-   last. Scroll-timeline driven, so no JS. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .funnel-layer,
-    .funnel-survivor {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation-timeline: view();
-      animation-fill-mode: both;
-      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .funnel-layer {
-      animation-name: funnel-in;
-      animation-range: entry 10% entry calc(75% + var(--reveal-delay, 0%));
-    }
-
-    .funnel-survivor {
-      animation-name: survivor-in;
-      animation-range: entry 45% entry 95%;
-    }
-  }
-}
-
-/* ---------------------------------------------------------------------------
- * Logo intro.
- *
- * Ported from the standalone preview, which looped every 5s. Here each phase
- * is its own animation with a delay and `forwards`, so the sequence plays once
- * on mount and holds its end state. Class names are prefixed to keep them out
- * of the way of the rest of the sheet.
- *
- * The pupil scales rather than animating its `r` attribute: the original
- * tweened the radius, which forces geometry recalculation every frame, while
- * a transform stays on the compositor for the same visual result.
- * ------------------------------------------------------------------------- */
-
-@keyframes logoIntro-drawEye {
-  from {
-    stroke-dashoffset: 400;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes logoIntro-pupilIn {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  70% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes logoIntro-checkSwipe {
-  0% {
-    stroke-dashoffset: 100;
-    opacity: 0;
-  }
-  1% {
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-}
-
-@keyframes logoIntro-fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* Ambient breathing once the intro has finished, so the mark is not dead
-   still. Deliberately tiny — 3% over six seconds. */
-@keyframes logoIntro-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-  }
   50% {
-    transform: scale(1.03);
+    transform: translateY(-12px);
   }
-}
-
-.logoIntro-eye,
-.logoIntro-check {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  will-change: stroke-dashoffset;
-}
-
-.logoIntro-eye {
-  stroke: #ffffff;
-  stroke-width: 2.5;
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-  animation: logoIntro-drawEye 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.logoIntro-check {
-  stroke: var(--color-lime);
-  stroke-width: 3;
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  opacity: 0;
-  animation: logoIntro-checkSwipe 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 2s
-    forwards;
-}
-
-.logoIntro-pupil {
-  fill: var(--color-lime);
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  will-change: transform, opacity;
-  animation:
-    logoIntro-pupilIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.5s forwards,
-    logoIntro-breathe 6s ease-in-out 4s infinite;
-}
-
-.logoIntro-wordmark {
-  opacity: 0;
-  animation: logoIntro-fadeUp 0.7s ease-out 2.8s forwards;
-}
-
-.logoIntro-tagline {
-  opacity: 0;
-  animation: logoIntro-fadeUp 0.7s ease-out 3.5s forwards;
-}
-
-/*
- * Reduced motion: hold the finished state from the first frame. Nothing
- * draws, nothing pulses, nothing breathes.
- */
-@media (prefers-reduced-motion: reduce) {
-  .logoIntro-eye,
-  .logoIntro-check,
-  .logoIntro-pupil,
-  .logoIntro-wordmark,
-  .logoIntro-tagline {
-    animation: none;
-    opacity: 1;
-    stroke-dashoffset: 0;
-    transform: none;
-  }
-}
-
-@keyframes progress-grow {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-/*
- * Reading progress, driven by the document scroll timeline. No scroll
- * listener means no per-tick main-thread work. Hidden entirely where scroll
- * timelines are unsupported rather than faked with JS.
- */
-.reading-progress {
-  transform: scaleX(0);
-}
-
-@supports (animation-timeline: scroll()) {
-  .reading-progress {
-    animation: progress-grow linear both;
-    animation-timeline: scroll(root block);
-  }
-}
-
-@keyframes grow-bar {
-  from {
-    width: 0;
-  }
-  to {
-    width: var(--bar-width, 100%);
-  }
-}
-
-/*
- * Allocation bars, on the same scroll timeline as `.reveal`. Without the
- * timeline they render at their final width, so the numbers are still right.
- */
-.grow-bar {
-  width: var(--bar-width, 100%);
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .grow-bar {
-      animation: grow-bar linear both;
-      animation-timeline: view();
-      animation-range: entry 10% entry calc(85% + var(--reveal-delay, 0%));
-    }
-  }
-}
-
-/*
- * Scroll-reveal, driven entirely by CSS scroll timelines.
- *
- * The base `.reveal` is deliberately un-styled: browsers without
- * `animation-timeline` (Firefox, Safari today) render the content normally,
- * so a missing feature can never hide copy. Only where the timeline is
- * supported does the element start faded and rise into place.
- */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: rise-in linear both;
-      animation-timeline: view();
-      /* Finish while the element is still entering the viewport, so text
-         spends as little time as possible at reduced opacity — a partially
-         faded paragraph is also partially failing contrast. */
-      animation-range: entry 5% entry calc(70% + var(--reveal-delay, 0%));
-    }
-  }
-}
-
-.defer-render {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 1200px;
 }
 
 html {
   scroll-behavior: smooth;
-  background: var(--color-navy-950);
+  background: var(--color-ink-950);
 }
 
 body {
-  background: var(--color-navy-950);
-  color: var(--color-ink);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-ink-950);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
   background: var(--color-lime);
-  color: var(--color-navy-950);
+  color: var(--color-ink-950);
 }
 
-/*
- * Visible keyboard focus. `:focus-visible` keeps the ring off mouse clicks
- * while guaranteeing every interactive element is traceable by keyboard —
- * the lime reads against both the navy and off-white surfaces.
- */
 :focus-visible {
   outline: 2px solid var(--color-lime);
   outline-offset: 3px;
-  border-radius: 4px;
-}
-
-/* details/summary drives the FAQ; hide the default marker in every engine. */
-summary::-webkit-details-marker {
-  display: none;
+  border-radius: 6px;
 }
 
 .balance {
   text-wrap: balance;
 }
 
+/**
+ * Grain overlay for the dark surfaces. An inline SVG feTurbulence rather than
+ * an image request — a few hundred bytes, and it never blocks paint.
+ */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-
-  .rise-in,
-  .scale-in,
-  .animate-float {
+  .animate-eye-glow,
+  .animate-drift {
     animation: none;
   }
 }
