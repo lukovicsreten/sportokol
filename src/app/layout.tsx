@@ -13,6 +13,7 @@ import {
   siteTitle,
   siteDescription,
   siteKeywords,
+  socialDescription,
 } from "@/lib/seo";
 
 // Only the weights the design uses; `swap` renders fallback text immediately
@@ -42,13 +43,13 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName,
     title: siteTitle,
-    description: siteDescription,
+    description: socialDescription,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
-    description: siteDescription,
+    description: socialDescription,
   },
   robots: {
     index: true,

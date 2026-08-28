@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { m, fadeUp, stagger, EASE } from "@/components/motion/Motion";
 import { cn } from "@/lib/cn";
 
@@ -164,14 +165,14 @@ export function TextReveal({
       className={cn("balance", className)}
     >
       {words.map(({ word, accent }, i) => (
-        // The gap lives on the wrapper rather than as a trailing space inside
-        // it, and `overflow-hidden` would clip the blur, so it is not used.
+        // The separator is a real space text node between the wrappers, not a
+        // margin and not a space inside them. A margin looked right but left
+        // the heading reading "Neverloseafuture" in textContent — which is
+        // what Google and screen readers actually consume. A space *inside*
+        // an inline-block is collapsed away, hence putting it between them.
+        <Fragment key={`${word}-${i}`}>
         <span
-          key={`${word}-${i}`}
-          className={cn(
-            "inline-block",
-            i < words.length - 1 && "mr-[0.26em]"
-          )}
+          className="inline-block"
         >
           <m.span
             variants={{
@@ -188,6 +189,8 @@ export function TextReveal({
             {word}
           </m.span>
         </span>
+        {i < words.length - 1 && " "}
+        </Fragment>
       ))}
     </MTag>
   );

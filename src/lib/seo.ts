@@ -32,6 +32,14 @@ export const siteKeywords = [
   "talent identification",
 ];
 
+/**
+ * Social cards get the hook, not the descriptive meta line. A search result
+ * needs to explain what the product is; a shared link needs to make someone
+ * stop scrolling.
+ */
+export const socialDescription =
+  "Never lose a future professional again. Turn pitch-side notes into a national database of talent.";
+
 export const contactEmail = "info@smsolutions.ai";
 export const companySite = "https://smsolutions.ai";
 

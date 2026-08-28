@@ -58,7 +58,9 @@ export default function TeamPage() {
                 <div className="flex items-center gap-5">
                   <Image
                     src={f.photo}
-                    alt={f.name}
+                    // Role as well as name: a portrait's alt should say who
+                    // this is to the site, not just repeat the caption.
+                    alt={`${f.name}, ${f.role.replace(" · ", ", ")} at Sportokol`}
                     width={400}
                     height={400}
                     sizes="96px"
