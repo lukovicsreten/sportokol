@@ -23,9 +23,10 @@ import { Callout } from "@/components/sections/shared";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 
 export const metadata: Metadata = {
-  title: "Product",
+  title: "Product — scouting software for clubs and academies",
   description:
     "Capture, structure and act on scouting data in one place. Pitch-side reports without video, one comparable database, and an AI layer that turns it into assessments.",
+  alternates: { canonical: "/product" },
 };
 
 const AI_SOURCES = [

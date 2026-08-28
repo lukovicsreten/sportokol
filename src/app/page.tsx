@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/primitives";
 import { Card, CountUp } from "@/components/ui/cards";
 import { TractionBar, ClosingCta } from "@/components/sections/shared";
+import { Faq } from "@/components/sections/Faq";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 
 const PROBLEMS = [
@@ -132,6 +133,7 @@ export default function HomePage() {
 
       <HowItWorks />
       <TractionBar />
+      <Faq />
       <ClosingCta />
     </>
   );

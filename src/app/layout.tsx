@@ -6,6 +6,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { StructuredData } from "@/components/StructuredData";
+import {
+  siteUrl,
+  siteName,
+  siteTitle,
+  siteDescription,
+  siteKeywords,
+} from "@/lib/seo";
 
 // Only the weights the design uses; `swap` renders fallback text immediately
 // rather than blocking paint on the webfont.
@@ -17,13 +25,52 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Sportokol — Never lose a future professional again",
-    template: "%s | Sportokol",
+    default: siteTitle,
+    template: `%s | ${siteName}`,
   },
-  description:
-    "A scout-first platform that turns pitch-side observation into a living, national database of talent. Built for clubs, academies, agencies and federations.",
-  icons: { icon: "/favicon.svg" },
+  description: siteDescription,
+  keywords: siteKeywords,
+  applicationName: siteName,
+  authors: [{ name: siteName }],
+  creator: siteName,
+  publisher: siteName,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName,
+    title: siteTitle,
+    description: siteDescription,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/manifest.webmanifest",
+  category: "technology",
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
@@ -45,6 +92,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <StructuredData />
         <MotionRoot>
           <PageLoader />
           <CustomCursor />

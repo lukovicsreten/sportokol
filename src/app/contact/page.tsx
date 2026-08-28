@@ -5,9 +5,10 @@ import { ContactForm } from "@/components/ContactForm";
 import { CONTACT_EMAIL, COMPANY_SITE } from "@/lib/nav";
 
 export const metadata: Metadata = {
-  title: "Get in touch",
+  title: "Get in touch — book a demo",
   description:
     "Talk to Sportokol — as a club, academy, agency or federation ready to stop losing talent, or as an investor backing the infrastructure layer of sports.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

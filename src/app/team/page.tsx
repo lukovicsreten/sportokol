@@ -7,9 +7,10 @@ import { Constellation } from "@/components/ui/Constellation";
 import { Callout, ClosingCta } from "@/components/sections/shared";
 
 export const metadata: Metadata = {
-  title: "Team",
+  title: "Team — the founders behind Sportokol",
   description:
-    "Sports operations meets founding expertise — the two founders behind Sportokol.",
+    "Sports operations meets founding expertise: the two founders behind Sportokol, from running a European-level club to bridging startups and capital.",
+  alternates: { canonical: "/team" },
 };
 
 const FOUNDERS = [

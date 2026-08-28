@@ -15,9 +15,10 @@ import { Callout } from "@/components/sections/shared";
 import { TRACTION } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About us — national talent infrastructure",
   description:
-    "National talent infrastructure: a living map of every prospect in the country, owned by the federations and academies that build it.",
+    "How Sportokol builds national talent infrastructure — a living record of every prospect, validated with FK TSC and the LALIGA Academy network.",
+  alternates: { canonical: "/about" },
 };
 
 const DIFFERENTIATORS = [
