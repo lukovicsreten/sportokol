@@ -4,8 +4,16 @@ import { useEffect, useState } from "react";
 import { m, AnimatePresence } from "@/components/motion/Motion";
 import { useMotionPrefs } from "@/lib/useMotionPrefs";
 
-/** Hold the loader at least this long so it never flashes on a fast connection. */
-const MIN_VISIBLE_MS = 1300;
+/**
+ * Hold the loader at least this long so it never flashes on a fast connection.
+ *
+ * Kept deliberately short: nothing can paint as LCP while the overlay is up,
+ * so every millisecond here is a millisecond added to Largest Contentful
+ * Paint on every page. 700ms still clears half a blink cycle, which is enough
+ * for the animation to register without turning a branded entrance into a
+ * ranking cost.
+ */
+const MIN_VISIBLE_MS = 700;
 const MIN_VISIBLE_REDUCED_MS = 400;
 
 /**
@@ -72,7 +80,7 @@ export function PageLoader() {
     : {
         scale: [0.9, 1.1, 0.9],
         transition: {
-          duration: 1.35,
+          duration: 1.05,
           repeat: Infinity,
           ease: "easeInOut" as const,
         },
@@ -83,7 +91,7 @@ export function PageLoader() {
     : {
         opacity: [0.4, 1, 0.4],
         transition: {
-          duration: 1.35,
+          duration: 1.05,
           repeat: Infinity,
           ease: "easeInOut" as const,
         },

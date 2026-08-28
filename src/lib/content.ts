@@ -6,20 +6,35 @@
  * rather than the value itself, so arrays imported that way are not arrays
  * and `.map` throws at prerender.
  */
-export const TRACTION = [
+export type TractionKind = "completed" | "winner" | "partnership" | "inuse";
+
+export const TRACTION: {
+  title: string;
+  body: string;
+  label: string;
+  kind: TractionKind;
+}[] = [
   {
+    label: "Pilot completed",
+    kind: "completed",
     title: "Pilot completed — FK TSC Bačka Topola",
     body: "A full pilot delivered with a Serbian SuperLiga club that reached the UEFA Conference League knockout phase.",
   },
   {
+    label: "In daily use",
+    kind: "inuse",
     title: "In use by academies & agencies",
     body: "Running today with multiple youth academies in both US and EU markets and player agencies, repeatable demand beyond the pilot.",
   },
   {
+    label: "Winner",
+    kind: "winner",
     title: "Winner — SMART START",
     body: "Selected by the national accelerator programme of the Innovation Fund: non-dilutive validation from a credible institution.",
   },
   {
+    label: "Active engagement",
+    kind: "partnership",
     title: "LALIGA Academy engagement",
     body: "Active engagement with one of world football's leading youth development networks — our entry into Spain.",
   },

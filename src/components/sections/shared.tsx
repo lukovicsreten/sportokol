@@ -7,7 +7,7 @@ import {
   RevealGrid,
   RevealItem,
 } from "@/components/ui/primitives";
-import { Card, IconBadge } from "@/components/ui/cards";
+import { Card } from "@/components/ui/cards";
 import { CTAButton } from "@/components/ui/CTAButton";
 import { Constellation } from "@/components/ui/Constellation";
 import { FloatingMotes, ScrollGlow } from "@/components/ui/Backdrop";
@@ -15,6 +15,12 @@ import { TiltCard } from "@/components/ui/TiltCard";
 import { useMotionPrefs } from "@/lib/useMotionPrefs";
 import { cn } from "@/lib/cn";
 import { TRACTION } from "@/lib/content";
+import {
+  CheckIcon,
+  StarIcon,
+  HandshakeIcon,
+  UsersIcon,
+} from "@/components/ui/StepIcons";
 
 /* -------------------------------------------------------------------------
  * Callout banner — the recurring lime-bordered emphasis block
@@ -48,29 +54,50 @@ export function Callout({
  * Traction — badges on Home, full cards on About
  * ---------------------------------------------------------------------- */
 
+const BADGE_ICON = {
+  completed: CheckIcon,
+  winner: StarIcon,
+  partnership: HandshakeIcon,
+  inuse: UsersIcon,
+} as const;
+
+/**
+ * Proof strip.
+ *
+ * Styled as awards rather than a list: a lit pill carrying the kind of
+ * recognition, its own glyph, and a shine that crosses on a long loop. The
+ * point is that these read as credentials at a glance, before anyone reads
+ * the words.
+ */
 export function TractionBar() {
   return (
     <SectionDark aria-label="Traction">
       <Constellation strength={60} />
       <FloatingMotes />
       <RevealGrid className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {TRACTION.map((t, i) => (
-          <RevealItem key={t.title} index={i}>
-            <TiltCard strength={6}>
-              {/* A shine sweeps across on a long, staggered loop so these read
-                  as the noteworthy items without nagging for attention. */}
-              <Card className="relative h-full overflow-hidden">
-                <Shine delay={i * 1.6} />
-                <IconBadge size="sm">
-                  <span className="text-xs font-extrabold">✓</span>
-                </IconBadge>
-                <p className="relative mt-4 font-display text-base font-extrabold leading-snug">
-                  {t.title}
-                </p>
-              </Card>
-            </TiltCard>
-          </RevealItem>
-        ))}
+        {TRACTION.map((t, i) => {
+          const Icon = BADGE_ICON[t.kind];
+          return (
+            <RevealItem key={t.title} index={i}>
+              <TiltCard strength={6}>
+                <Card className="relative h-full overflow-hidden">
+                  <Shine delay={i * 1.6} />
+                  <div className="relative flex items-center gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-lime/50 bg-lime/15 text-lime">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <span className="rounded-full border border-lime/30 bg-lime/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-lime">
+                      {t.label}
+                    </span>
+                  </div>
+                  <p className="relative mt-4 font-display text-base font-extrabold leading-snug">
+                    {t.title}
+                  </p>
+                </Card>
+              </TiltCard>
+            </RevealItem>
+          );
+        })}
       </RevealGrid>
     </SectionDark>
   );
@@ -119,8 +146,16 @@ export function ClosingCta() {
             losing talent, or as an investor backing the infrastructure layer
             of sports.
           </p>
+          {/* Deliberately the largest button on the site: this is the last
+              thing between a visitor and leaving. */}
           <div className="mt-10 flex justify-center">
-            <CTAButton href="/contact">Get in touch</CTAButton>
+            <CTAButton
+              href="/contact"
+              pulse
+              className="min-h-16 px-12 text-base sm:min-h-[4.25rem] sm:px-14 sm:text-lg"
+            >
+              Get in touch
+            </CTAButton>
           </div>
         </Reveal>
       </div>

@@ -78,22 +78,29 @@ export default function HomePage() {
         </Reveal>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-          <Reveal className="rounded-2xl bg-ink-950 p-8 text-white">
-            <p className="font-display text-6xl font-extrabold tracking-tight text-lime">
+          {/* Numbers roughly 50% larger than the label beneath them, and the
+              two stats separated by real space rather than a hairline — the
+              size gap is what makes the hierarchy read at a glance. */}
+          <Reveal className="rounded-2xl bg-ink-950 p-8 text-white sm:p-10">
+            <p className="font-display text-[5.5rem] font-extrabold leading-[0.95] tracking-tight text-lime sm:text-[6.5rem]">
               <CountUp value={4} suffix="%" />
             </p>
-            <p className="mt-2 text-sm font-bold uppercase tracking-[0.16em] text-white">
+            <p className="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-lime">
               reach the top tier
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-mist">
+            <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-mist">
               of academy prospects make it — the other 96% are filtered out,
               most never systematically tracked along the way.
             </p>
-            <div className="mt-8 border-t border-white/10 pt-6">
-              <p className="font-display text-4xl font-extrabold tracking-tight text-lime">
+
+            <div className="mt-12 border-t border-white/10 pt-10">
+              <p className="font-display text-[4rem] font-extrabold leading-[0.95] tracking-tight text-lime sm:text-[4.75rem]">
                 <CountUp value={55} suffix="%" />
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-mist">
+              <p className="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-lime">
+                clinical distress
+              </p>
+              <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-mist">
                 of released academy players show clinical distress within 3
                 weeks.
               </p>
@@ -120,13 +127,13 @@ export default function HomePage() {
           </RevealGrid>
         </div>
 
-        <Reveal className="mt-12 rounded-2xl bg-ink-950 px-6 py-9 text-center sm:px-10">
-          <p className="balance mx-auto max-w-3xl text-lg leading-relaxed text-white sm:text-xl">
-            <span className="font-display text-2xl font-extrabold text-lime sm:text-3xl">
-              <CountUp value={1000000} suffix="+" />
-            </span>{" "}
-            registered players in Spain alone and most are never systematically
-            scouted, compared, or tracked over time.
+        <Reveal className="mt-12 rounded-2xl bg-ink-950 px-6 py-12 text-center sm:px-10">
+          <p className="font-display text-5xl font-extrabold tracking-tight text-lime sm:text-6xl">
+            <CountUp value={1000000} suffix="+" />
+          </p>
+          <p className="balance mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-mist">
+            registered players in Spain alone — and most are never
+            systematically scouted, compared, or tracked over time.
           </p>
         </Reveal>
       </SectionLight>

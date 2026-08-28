@@ -19,7 +19,10 @@
 
   --color-paper: #f5f7fa;
   --color-mist: #aab8cc;
-  --color-slate: #5b6b85;
+  /* Body copy on the light surfaces. Darkened from #5b6b85 (5.0:1, AA only)
+     to clear AAA at 7.0:1 — it is the smallest text on the site and the
+     hardest to read on a phone in daylight. */
+  --color-slate: #4a5568;
 
   --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;

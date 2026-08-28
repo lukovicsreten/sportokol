@@ -8,10 +8,16 @@ import { Callout } from "@/components/sections/shared";
 import { FloatingMotes } from "@/components/ui/Backdrop";
 import { useMotionPrefs } from "@/lib/useMotionPrefs";
 import { cn } from "@/lib/cn";
+import {
+  CaptureIcon,
+  StructureIcon,
+  IntelligenceIcon,
+} from "@/components/ui/StepIcons";
 
 const STEPS = [
   {
     n: "01",
+    Icon: CaptureIcon,
     title: "Capture",
     body: "Scouts record what they see at training or matches, mobile, pitch-side, no film crew, any sport.",
     listLabel: "What the scout enters",
@@ -19,6 +25,7 @@ const STEPS = [
   },
   {
     n: "02",
+    Icon: StructureIcon,
     title: "Structure",
     body: "Every report lands in one live database, comparable and trackable across scouts, months and seasons.",
     listLabel: "Becomes a filterable player index",
@@ -27,6 +34,7 @@ const STEPS = [
   },
   {
     n: "03",
+    Icon: IntelligenceIcon,
     title: "Intelligence",
     body: "AI turns raw reports into decisions, trained on the methodology of pro scouts, coaches and players.",
     listLabel: "What the AI produces",
@@ -53,16 +61,23 @@ function StepPanel({
           : "border-white/10 bg-white/[0.02] opacity-45"
       )}
     >
+      {/* Icon leads, number sits beside it as a small ordinal — the glyph
+          says what the step is, the number says where it sits in the flow. */}
       <div className="flex items-center gap-4">
         <IconBadge
-          className={cn(
-            "transition-colors duration-500",
-            active && "border-lime bg-lime text-ink-950"
-          )}
+          tone={active ? "solid" : "outline"}
+          className="transition-colors duration-500"
         >
-          <span className="text-sm font-extrabold">{step.n}</span>
+          <step.Icon className="h-6 w-6" />
         </IconBadge>
-        <h3 className="font-display text-2xl font-extrabold">{step.title}</h3>
+        <div>
+          <span className="block text-[11px] font-bold tracking-[0.22em] text-lime">
+            {step.n}
+          </span>
+          <h3 className="font-display text-2xl font-extrabold leading-tight">
+            {step.title}
+          </h3>
+        </div>
       </div>
       <p className="mt-4 text-[15px] leading-relaxed text-mist">{step.body}</p>
       <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-lime">

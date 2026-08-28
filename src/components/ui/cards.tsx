@@ -12,15 +12,27 @@ export function IconBadge({
   children,
   className,
   size = "md",
+  tone = "outline",
 }: {
   children: React.ReactNode;
   className?: string;
   size?: "sm" | "md";
+  /**
+   * Colour set, chosen explicitly rather than by layering another `bg-*` and
+   * `text-*` on top through className. Which of two competing utilities wins
+   * depends on their order in the stylesheet, not in the class string — an
+   * earlier version relied on that and produced a lime icon on a lime badge,
+   * i.e. an empty circle.
+   */
+  tone?: "outline" | "solid";
 }) {
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full border border-lime/40 bg-ink-950 text-lime",
+        "inline-flex shrink-0 items-center justify-center rounded-full border",
+        tone === "solid"
+          ? "border-lime bg-lime text-ink-950"
+          : "border-lime/40 bg-ink-950 text-lime",
         size === "md" ? "h-12 w-12" : "h-9 w-9",
         className
       )}
