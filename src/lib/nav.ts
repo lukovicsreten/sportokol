@@ -7,5 +7,6 @@ export const NAV_LINKS = [
   { label: "Get in touch", href: "/contact" },
 ] as const;
 
-export const CONTACT_EMAIL = "info@smsolutions.ai";
-export const COMPANY_SITE = "https://smsolutions.ai";
+// Re-exported so the existing `@/lib/nav` import sites keep working, while the
+// values themselves live in one place. See contact.ts.
+export { CONTACT_EMAIL, COMPANY_SITE } from "@/lib/contact";

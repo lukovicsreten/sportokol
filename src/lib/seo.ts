@@ -40,8 +40,9 @@ export const siteKeywords = [
 export const socialDescription =
   "Never lose a future professional again. Turn pitch-side notes into a national database of talent.";
 
-export const contactEmail = "info@smsolutions.ai";
-export const companySite = "https://smsolutions.ai";
+// Aliased from the shared module rather than restated, so the address in the
+// JSON-LD can never disagree with the one the page actually shows.
+export { CONTACT_EMAIL as contactEmail, COMPANY_SITE as companySite } from "@/lib/contact";
 
 /** Indexable routes. Order matches the nav. */
 export const ROUTES = [
