@@ -11,3 +11,12 @@ export const CONTACT_EMAIL = "info@sportokol.com";
 
 /** Parent company. Sportokol is a product of Sports Management Systems. */
 export const COMPANY_SITE = "https://smsolutions.ai";
+
+/**
+ * Envelope sender for form mail.
+ *
+ * Must be on a domain verified in Resend. Sending from an address is
+ * unrelated to whether that address can receive — no mailbox is needed
+ * behind forms@, it only has to be a domain we are authorised to send as.
+ */
+export const MAIL_FROM = "Sportokol <forms@sportokol.com>";
