@@ -15,8 +15,18 @@ export const COMPANY_SITE = "https://smsolutions.ai";
 /**
  * Envelope sender for form mail.
  *
- * Must be on a domain verified in Resend. Sending from an address is
- * unrelated to whether that address can receive — no mailbox is needed
- * behind forms@, it only has to be a domain we are authorised to send as.
+ * On the send. subdomain, not the root, because that is the domain verified
+ * in Resend — and it is verified there deliberately. SPF allows exactly one
+ * TXT record per name, and the root already carries Zoho's
+ * (`v=spf1 include:zohomail.eu ~all`) for the mailboxes. Putting Resend on a
+ * subdomain gives it its own SPF instead of merging two senders into one
+ * fragile record, and keeps form-sending reputation off the domain the team
+ * reads their mail on.
+ *
+ * The cosmetics do not matter here: this mail only ever goes to CONTACT_EMAIL,
+ * so the sender address is seen by the team, never by an enquirer.
+ *
+ * No mailbox is needed behind forms@ — sending as an address is unrelated to
+ * whether it can receive.
  */
-export const MAIL_FROM = "Sportokol <forms@sportokol.com>";
+export const MAIL_FROM = "Sportokol <forms@send.sportokol.com>";
