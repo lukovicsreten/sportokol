@@ -18,7 +18,8 @@ export function Faq() {
         <Reveal className="flex flex-col items-center text-center">
           <EyebrowLabel dark={false}>Questions</EyebrowLabel>
           <h2 className="balance mt-6 font-display text-4xl font-extrabold tracking-[-0.02em] text-ink-950 sm:text-5xl">
-            Frequently asked questions
+            Frequently Asked Questions About Sportokol&rsquo;s Scouting
+            Software
           </h2>
         </Reveal>
 

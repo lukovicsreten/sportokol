@@ -14,11 +14,14 @@ import {
   IntelligenceIcon,
 } from "@/components/ui/StepIcons";
 
+// `n` is no longer rendered — each heading now opens with "Step 1" and so on.
+// It stays as a stable React key, which is better than keying off a display
+// string that copy edits will change.
 const STEPS = [
   {
     n: "01",
     Icon: CaptureIcon,
-    title: "Capture",
+    title: "Step 1: Capture Pitch-Side Observations",
     body: "Scouts record what they see at training or matches, mobile, pitch-side, no film crew, any sport.",
     listLabel: "What the scout enters",
     items: ["Technical", "Physical", "Mental", "Free-text notes"],
@@ -26,7 +29,7 @@ const STEPS = [
   {
     n: "02",
     Icon: StructureIcon,
-    title: "Structure",
+    title: "Step 2: Structure Data into a Searchable Database",
     body: "Every report lands in one live database, comparable and trackable across scouts, months and seasons.",
     listLabel: "Becomes a filterable player index",
     items: ["Sport", "Age", "Position"],
@@ -35,7 +38,7 @@ const STEPS = [
   {
     n: "03",
     Icon: IntelligenceIcon,
-    title: "Intelligence",
+    title: "Step 3: Get AI-Powered Player Intelligence",
     body: "AI turns raw reports into decisions, trained on the methodology of pro scouts, coaches and players.",
     listLabel: "What the AI produces",
     items: [
@@ -70,14 +73,9 @@ function StepPanel({
         >
           <step.Icon className="h-6 w-6" />
         </IconBadge>
-        <div>
-          <span className="block text-[11px] font-bold tracking-[0.22em] text-lime">
-            {step.n}
-          </span>
-          <h3 className="font-display text-2xl font-extrabold leading-tight">
-            {step.title}
-          </h3>
-        </div>
+        <h3 className="font-display text-xl font-extrabold leading-tight sm:text-2xl">
+          {step.title}
+        </h3>
       </div>
       <p className="mt-4 text-[15px] leading-relaxed text-mist">{step.body}</p>
       <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-lime">
@@ -105,7 +103,7 @@ function Header() {
       <TextReveal
         as="h2"
         trigger="scroll"
-        text="From a pitch-side note to a decision, in **one flow**"
+        text="How the **AI Scouting Platform** Works in 3 Steps"
         className="mt-6 font-display text-4xl font-extrabold tracking-[-0.02em] sm:text-5xl"
       />
       <LeadParagraph className="mt-5 max-w-xl text-lg leading-relaxed text-mist">

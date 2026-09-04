@@ -15,22 +15,22 @@ import { HowItWorks } from "@/components/sections/HowItWorks";
 
 const PROBLEMS = [
   {
-    title: "The best talent is invisible to the tools that exist",
+    title: "Invisible Talent: Why Video-Based Scouting Fails",
     body: "Youth & grassroots are barely filmed, so video-based incumbents (Wyscout, Hudl) have nothing to work with.",
     fix: "Captures pitch-side observation and no video needed.",
   },
   {
-    title: "Talent is selected by birthday, not ability",
+    title: "Birthday Bias: How Relative Age Effect Skews Selection",
     body: "The relative-age effect skews selection ~90/10 toward early-born kids at age 6; late developers are lost for good.",
     fix: "Tracks development over time to catch the late bloomers.",
   },
   {
-    title: "Evaluation is subjective and never pooled",
+    title: "Subjective Evaluation: The Need for a Shared Framework",
     body: "Scouts (un)consciously rate older, bigger kids higher, with no shared framework to compare players fairly.",
     fix: "One shared framework for every player comparable.",
   },
   {
-    title: "Knowledge walks out the door",
+    title: "Lost Knowledge: When Scouts Leave, Data Walks Out",
     body: "Scouting still lives in notebooks, spreadsheets and PDFs, when a scout leaves, years of context leave too.",
     fix: "One owned database, a memory that compounds.",
   },
@@ -67,8 +67,7 @@ export default function HomePage() {
             <EyebrowLabel dark={false}>The problem</EyebrowLabel>
           </div>
           <h2 className="balance mt-6 font-display text-4xl font-extrabold tracking-[-0.02em] text-ink-950 sm:text-5xl">
-            An industry that loses talent it can&rsquo;t see, measure or
-            remember
+            The Problem: Youth Sports Loses 96% of Its Talent
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-slate">
             Youth football runs the most expensive talent funnel in sport
