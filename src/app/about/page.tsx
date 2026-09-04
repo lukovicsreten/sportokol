@@ -36,10 +36,22 @@ const DIFFERENTIATORS = [
   },
 ];
 
-const STORIES = [
+/**
+ * `href` links the organisation's own site, so a reader can check who they are
+ * rather than taking the name on trust. It identifies the organisation — it is
+ * not a citation for the engagement itself, and nothing here should imply the
+ * linked site says anything about Sportokol.
+ */
+const STORIES: {
+  name: string;
+  badge: string;
+  href?: string;
+  points: string[];
+}[] = [
   {
     name: "FK TSC Bačka Topola",
     badge: "Pilot completed",
+    href: "https://www.fktsc.com/en/pocetna/",
     points: [
       "Serbian SuperLiga club that reached the UEFA Conference League knockout phase in 2023/24, matched only by Crvena zvezda and Partizan.",
       "A club built on youth: TSC develops from its own academy base and has produced players now at major European clubs.",
@@ -49,8 +61,12 @@ const STORIES = [
   {
     name: "LALIGA Academy",
     badge: "Active engagement",
+    href: "https://www.laliga.com/en-GB/news/laliga-academy-madrid-gets-underway-with-twice-as-many-players-and-now-with-its-first-womens-youth-team",
     points: [
-      "One of world football's leading youth development networks, running academy programmes across dozens of countries on the LALIGA methodology.",
+      // Figures are LALIGA's own, published on the page linked above. Naming
+      // them beats "dozens of countries": a reader can check the number, and a
+      // checkable number is worth more than a vague one.
+      "One of world football's leading youth development networks — 650+ projects across 50+ countries, all run on the LALIGA methodology.",
       "Our route into Spain — a market of 21,000+ clubs and more than a million registered players.",
       "Benchmarks the platform against elite international academy standards, not only domestic ones.",
     ],
@@ -149,7 +165,19 @@ export default function AboutPage() {
                   {s.badge}
                 </span>
                 <h3 className="mt-5 font-display text-2xl font-extrabold text-ink-950">
-                  {s.name}
+                  {s.href ? (
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline decoration-lime-deep/40 decoration-2 underline-offset-4 transition-colors hover:text-lime-deep"
+                    >
+                      {s.name}
+                      <span className="sr-only"> (opens their own site)</span>
+                    </a>
+                  ) : (
+                    s.name
+                  )}
                 </h3>
                 <ul className="mt-4 space-y-3">
                   {s.points.map((p) => (

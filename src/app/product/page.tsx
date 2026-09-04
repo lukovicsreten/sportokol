@@ -23,9 +23,14 @@ import { Callout } from "@/components/sections/shared";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 
 export const metadata: Metadata = {
-  title: "Product — scouting software for clubs and academies",
+  // 41 characters. The layout appends " | Sportokol", and Google truncates the
+  // rendered title around 60 — the previous wording came to 63 and lost its
+  // last words in the result. Dropping the word "Product" costs nothing and
+  // puts the search phrase first.
+  title: "Scouting software for clubs and academies",
+  /** 147 characters, inside the ~160 Google renders. */
   description:
-    "Capture, structure and act on scouting data in one place. Pitch-side reports without video, one comparable database, and an AI layer that turns it into assessments.",
+    "Capture, structure and act on scouting data in one place: pitch-side reports without video, one comparable database, and an AI layer that reads it.",
   alternates: { canonical: "/product" },
 };
 
