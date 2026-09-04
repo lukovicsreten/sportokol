@@ -63,10 +63,17 @@ export const metadata: Metadata = {
     },
   },
   icons: {
+    // SVG stays first — browsers prefer it for the tab and it stays crisp at
+    // any zoom. The .ico is declared explicitly after it, and again as
+    // `shortcut`, for Google: its favicon crawler reads SVG, but ICO at the
+    // root is the format it has always handled most reliably, and this file
+    // carries real 16/32/48 bitmaps rather than one image scaled down.
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48", type: "image/x-icon" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
+    shortcut: [{ url: "/favicon.ico" }],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   manifest: "/manifest.webmanifest",
