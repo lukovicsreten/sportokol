@@ -16,12 +16,22 @@ export const siteUrl = (
 
 export const siteName = "Sportokol";
 
-/** 58 characters — inside what Google renders before truncating. */
-export const siteTitle = "Sportokol — Scouting platform for youth sport";
+/**
+ * 58 characters, inside what Google renders before truncating.
+ *
+ * The home page uses this as `title.default`, so the " | Sportokol" template
+ * is not appended here — the whole string is the title, and the budget is the
+ * full 60 rather than 48.
+ *
+ * Tennis is live too but does not fit; the description and the page itself
+ * cover it. Football and basketball are the volume searches.
+ */
+export const siteTitle =
+  "Sportokol | AI Scouting Platform for Football & Basketball";
 
-/** 154 characters. */
+/** 139 characters. */
 export const siteDescription =
-  "Sportokol turns pitch-side scouting into a national database of talent for football, basketball and tennis. Built for clubs, academies and federations.";
+  "AI-driven scouting software for academies & clubs. Turn pitch-side observations into a searchable talent database. Stop losing future pros.";
 
 export const siteKeywords = [
   "scouting platform",
