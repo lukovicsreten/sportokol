@@ -7,11 +7,17 @@ import { useMotionPrefs } from "@/lib/useMotionPrefs";
 /**
  * Hold the loader at least this long so it never flashes on a fast connection.
  *
- * Kept deliberately short: nothing can paint as LCP while the overlay is up,
- * so every millisecond here is a millisecond added to Largest Contentful
- * Paint on every page. 700ms still clears half a blink cycle, which is enough
- * for the animation to register without turning a branded entrance into a
- * ranking cost.
+ * Measured from navigation start, not from mount, and the overlay leaves as
+ * soon as that budget is spent — it does not wait for window.load. That wait
+ * was the single most expensive thing on the site: load fires only once every
+ * script and font has arrived, which on a throttled phone is around 3.6s, and
+ * nothing can paint as LCP while the overlay is up. The page is server
+ * rendered and its CSS is already applied by first paint, so there is nothing
+ * to wait for.
+ *
+ * On a slow device hydration alone outlasts this budget, so the loader clears
+ * the moment the page is interactive. On a fast one it holds the full 700ms,
+ * which is where the branded entrance still has room.
  */
 const MIN_VISIBLE_MS = 700;
 const MIN_VISIBLE_REDUCED_MS = 400;
@@ -54,25 +60,15 @@ export function PageLoader() {
   }, [loading]);
 
   useEffect(() => {
-    const started = performance.now();
-    let timer: ReturnType<typeof setTimeout>;
+    const minimum = reduced ? MIN_VISIBLE_REDUCED_MS : MIN_VISIBLE_MS;
 
-    const finish = () => {
-      const minimum = reduced ? MIN_VISIBLE_REDUCED_MS : MIN_VISIBLE_MS;
-      const remaining = Math.max(0, minimum - (performance.now() - started));
-      timer = setTimeout(() => setLoading(false), remaining);
-    };
-
-    if (document.readyState === "complete") {
-      finish();
-    } else {
-      window.addEventListener("load", finish, { once: true });
-    }
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("load", finish);
-    };
+    // performance.now() is already milliseconds since navigation start, so it
+    // measures how long the visitor has been looking at the loader — not how
+    // long since this effect ran. Counting from mount instead restarted the
+    // clock after hydration and charged that time twice.
+    const remaining = Math.max(0, minimum - performance.now());
+    const timer = setTimeout(() => setLoading(false), remaining);
+    return () => clearTimeout(timer);
   }, [reduced]);
 
   const pulse = reduced
