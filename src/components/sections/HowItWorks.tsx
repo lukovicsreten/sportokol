@@ -13,6 +13,11 @@ import {
   StructureIcon,
   IntelligenceIcon,
 } from "@/components/ui/StepIcons";
+import {
+  CaptureMockup,
+  StructureMockup,
+  IntelligenceMockup,
+} from "@/components/ui/StepMockups";
 
 // `n` is no longer rendered — each heading now opens with "Step 1" and so on.
 // It stays as a stable React key, which is better than keying off a display
@@ -21,6 +26,7 @@ const STEPS = [
   {
     n: "01",
     Icon: CaptureIcon,
+    Mockup: CaptureMockup,
     title: "Step 1: Capture Pitch-Side Observations",
     body: "Scouts record what they see at training or matches, mobile, pitch-side, no film crew, any sport.",
     listLabel: "What the scout enters",
@@ -29,6 +35,7 @@ const STEPS = [
   {
     n: "02",
     Icon: StructureIcon,
+    Mockup: StructureMockup,
     title: "Step 2: Structure Data into a Searchable Database",
     body: "Every report lands in one live database, comparable and trackable across scouts, months and seasons.",
     listLabel: "Becomes a filterable player index",
@@ -38,6 +45,7 @@ const STEPS = [
   {
     n: "03",
     Icon: IntelligenceIcon,
+    Mockup: IntelligenceMockup,
     title: "Step 3: Get AI-Powered Player Intelligence",
     body: "AI turns raw reports into decisions, trained on the methodology of pro scouts, coaches and players.",
     listLabel: "What the AI produces",
@@ -51,9 +59,18 @@ const STEPS = [
 function StepPanel({
   step,
   active,
+  showMockup,
 }: {
   step: (typeof STEPS)[number];
   active: boolean;
+  /**
+   * The pinned track holds all three panels inside one sticky viewport, so a
+   * mockup in every panel would overflow it. Only the active step shows one
+   * there, which turns the constraint into the better interaction anyway: the
+   * screen changes under you as you scroll the steps. The stacked variant
+   * scrolls normally and shows all three.
+   */
+  showMockup: boolean;
 }) {
   return (
     <div
@@ -92,6 +109,23 @@ function StepPanel({
         ))}
       </ul>
       {step.note && <p className="mt-3 text-xs text-mist">{step.note}</p>}
+
+      {/*
+        Height animates through grid-template-rows 0fr -> 1fr, which is the one
+        way to transition to content height in pure CSS. Framer is not an
+        option here: the site loads its domAnimation feature set, which leaves
+        out layout animations.
+      */}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-500 ease-out motion-reduce:transition-none",
+          showMockup ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          <step.Mockup className="mt-5" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -170,11 +204,34 @@ function PinnedSteps() {
                   />
                 ))}
               </div>
+
+              {/*
+                The mockup lives here rather than inside the panels. Three
+                panels plus a mockup overflowed the sticky viewport and the
+                screen was simply cut off — and this column was half empty
+                anyway. It also makes the better interaction: one screen that
+                swaps as the steps advance, copy alongside it.
+              */}
+              <div className="relative mt-9 hidden lg:block">
+                {STEPS.map((s, i) => (
+                  <div
+                    key={s.n}
+                    className={cn(
+                      "transition-opacity duration-500 motion-reduce:transition-none",
+                      i === index
+                        ? "opacity-100"
+                        : "pointer-events-none absolute inset-0 opacity-0"
+                    )}
+                  >
+                    <s.Mockup className="max-w-sm" />
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="space-y-4">
               {STEPS.map((s, i) => (
-                <StepPanel key={s.n} step={s} active={i === index} />
+                <StepPanel key={s.n} step={s} active={i === index} showMockup={false} />
               ))}
             </div>
           </div>
@@ -211,7 +268,15 @@ function StackedSteps() {
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.6, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
             >
-              <StepPanel step={s} active />
+              <StepPanel step={s} active showMockup />
+              {/* Connector between the stacked panels, so 1 -> 2 -> 3 reads as
+                  a sequence rather than three separate cards. Decorative, and
+                  absent after the last one. */}
+              {i < STEPS.length - 1 && (
+                <div aria-hidden="true" className="flex justify-center py-1">
+                  <span className="h-6 w-px bg-gradient-to-b from-lime/60 to-lime/10" />
+                </div>
+              )}
             </m.div>
           ))}
         </div>
