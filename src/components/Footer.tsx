@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/brand/Logo";
-import { NAV_LINKS, CONTACT_EMAIL, COMPANY_SITE } from "@/lib/nav";
+import { FOOTER_LINKS, CONTACT_EMAIL, COMPANY_SITE } from "@/lib/nav";
 
 export function Footer() {
   return (
@@ -19,7 +19,7 @@ export function Footer() {
             Navigate
           </h2>
           <ul className="mt-4 flex flex-col">
-            {NAV_LINKS.map((l) => (
+            {FOOTER_LINKS.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
