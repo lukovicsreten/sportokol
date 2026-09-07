@@ -95,14 +95,16 @@ export function EyebrowLabel({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, ease: EASE }}
       className={cn(
-        "flex items-center gap-3 text-xs font-bold uppercase tracking-[0.28em]",
+        "flex items-center gap-2 text-xs font-bold uppercase tracking-[0.28em]",
         dark ? "text-lime" : "text-lime-deep",
         className
       )}
     >
+      {/* A tick, not a rule. At 28px it read as a template flourish; 12px
+          still marks the label without announcing itself. */}
       <span
         aria-hidden="true"
-        className={cn("h-px w-7", dark ? "bg-lime" : "bg-lime-deep")}
+        className={cn("h-px w-3", dark ? "bg-lime" : "bg-lime-deep")}
       />
       {children}
     </m.p>
