@@ -7,13 +7,13 @@ import { Constellation } from "@/components/ui/Constellation";
 import { Callout, ClosingCta } from "@/components/sections/shared";
 
 export const metadata: Metadata = {
-  title: "Team — the founders behind Sportokol",
+  title: "Team — operations, fundraising and sales",
   description:
-    "Sports operations meets founding expertise: the two founders behind Sportokol, from running a European-level club to bridging startups and capital.",
+    "The people behind Sportokol: a CEO running operations inside a European-level football club, and an advisor opening US go-to-market and access to investors.",
   alternates: { canonical: "/team" },
 };
 
-const FOUNDERS = [
+const TEAM = [
   {
     name: "Aleksandar Isaković",
     role: "CEO · Partnerships",
@@ -28,15 +28,15 @@ const FOUNDERS = [
   },
   {
     name: "Vladislav Pavlov",
-    role: "CFO / CSO · Strategy & Markets",
+    role: "Fundraising and Sales Advisor",
     photo: "/team/vladislav-pavlov.jpg",
-    line: "Bridges South-East European startups with the customers, capital and operators to scale internationally.",
+    line: "Advises on fundraising and sales, bridging South-East European startups with the customers, capital and operators to scale internationally.",
     points: [
       "Founder of Furtherance Network, connecting SEE startups to Central-European & US markets.",
       "5+ years in B2B sales & business development across Germany, the US and Serbia.",
       "Deep VC-ecosystem network; mentor within the regional startup accelerator scene.",
     ],
-    tag: "Owns financial strategy & market entry",
+    tag: "Helps on GTM for the US & access to investors",
   },
 ];
 
@@ -44,15 +44,15 @@ export default function TeamPage() {
   return (
     <>
       <Hero
-        eyebrow="The founders"
-        headline="Sports operations meets **founding expertise**"
-        subhead="A founder who has run operations inside a European-level football club, paired with one who builds the bridge between South-East European startups and international capital."
+        eyebrow="The team"
+        headline="Sports operations meets **market access**"
+        subhead="A CEO who has run operations inside a European-level football club, and an advisor who opens US go-to-market and the door to investors."
       />
 
-      <SectionDark aria-label="Founders">
+      <SectionDark aria-label="Team">
         <Constellation strength={60} />
         <RevealGrid className="relative grid gap-6 lg:grid-cols-2">
-          {FOUNDERS.map((f, i) => (
+          {TEAM.map((f, i) => (
             <RevealItem key={f.name} index={i}>
               <Card className="flex h-full flex-col p-7 sm:p-8">
                 <div className="flex items-center gap-5">
