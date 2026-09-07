@@ -71,6 +71,20 @@ const STORIES: {
       "Benchmarks the platform against elite international academy standards, not only domestic ones.",
     ],
   },
+  {
+    name: "SMART START",
+    badge: "Winner",
+    // The Innovation Fund publishes this in English at /en/; /eng/ redirects
+    // to the Cyrillic page, which is the wrong one to send this audience to.
+    href: "https://www.inovacionifond.rs/en/program/smart-start",
+    points: [
+      // Every figure here is the Fund's own, on the page linked above — so a
+      // reader who follows the link can check each one.
+      "Serbia's national Innovation Fund backs early-stage teams to validate an idea and build a first working product: up to 5.4m RSD, plus a dedicated mentoring budget.",
+      "The Fund covers up to 90% of the project budget and takes no equity, so the validation costs nothing off the cap table.",
+      "Six to nine months of funded development with structured mentoring, rather than a one-off cheque.",
+    ],
+  },
 ];
 
 const PHASES: Phase[] = [
@@ -157,7 +171,7 @@ export default function AboutPage() {
           ))}
         </RevealGrid>
 
-        <RevealGrid className="mt-8 grid gap-6 lg:grid-cols-2">
+        <RevealGrid className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {STORIES.map((s, i) => (
             <RevealItem key={s.name} index={i}>
               <Card dark={false} className="h-full">
