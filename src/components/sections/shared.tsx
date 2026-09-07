@@ -91,7 +91,19 @@ export function TractionBar() {
                     </span>
                   </div>
                   <p className="relative mt-4 font-display text-base font-extrabold leading-snug">
-                    {t.title}
+                    {t.href ? (
+                      <a
+                        href={t.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline decoration-lime/40 decoration-2 underline-offset-4 transition-colors hover:text-lime"
+                      >
+                        {t.title}
+                        <span className="sr-only"> (opens their own site)</span>
+                      </a>
+                    ) : (
+                      t.title
+                    )}
                   </p>
                 </Card>
               </TiltCard>

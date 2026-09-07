@@ -13,10 +13,19 @@ export const TRACTION: {
   body: string;
   label: string;
   kind: TractionKind;
+  /**
+   * The named organisation's own page, so a reader can check who they are
+   * rather than take the name on trust. It identifies the organisation — none
+   * of these pages mentions Sportokol, and none is offered as a citation for
+   * the engagement itself. Omitted where there is no single organisation to
+   * point at.
+   */
+  href?: string;
 }[] = [
   {
     label: "Pilot completed",
     kind: "completed",
+    href: "https://www.fktsc.com/en/pocetna/",
     title: "Pilot completed — FK TSC Bačka Topola",
     body: "A full pilot delivered with a Serbian SuperLiga club that reached the UEFA Conference League knockout phase.",
   },
@@ -29,12 +38,15 @@ export const TRACTION: {
   {
     label: "Winner",
     kind: "winner",
+    // The fund publishes this in English at /en/; /eng/ redirects to Cyrillic.
+    href: "https://www.inovacionifond.rs/en/program/smart-start",
     title: "Winner — SMART START",
     body: "Selected by the national accelerator programme of the Innovation Fund: non-dilutive validation from a credible institution.",
   },
   {
     label: "Active engagement",
     kind: "partnership",
+    href: "https://www.laliga.com/en-GB/news/laliga-academy-madrid-gets-underway-with-twice-as-many-players-and-now-with-its-first-womens-youth-team",
     title: "LALIGA Academy engagement",
     body: "Active engagement with one of world football's leading youth development networks — our entry into Spain.",
   },
