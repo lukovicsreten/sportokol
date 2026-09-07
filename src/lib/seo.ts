@@ -52,7 +52,7 @@ export const socialDescription =
 
 // Aliased from the shared module rather than restated, so the address in the
 // JSON-LD can never disagree with the one the page actually shows.
-export { CONTACT_EMAIL as contactEmail, COMPANY_SITE as companySite } from "@/lib/contact";
+export { CONTACT_EMAIL as contactEmail } from "@/lib/contact";
 
 /** Indexable routes. Order matches the nav. */
 export const ROUTES = [
@@ -61,5 +61,4 @@ export const ROUTES = [
   { path: "/product", priority: 0.9 },
   { path: "/team", priority: 0.6 },
   { path: "/contact", priority: 0.7 },
-  { path: "/blog", priority: 0.5 },
 ] as const;

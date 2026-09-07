@@ -9,9 +9,6 @@
  */
 export const CONTACT_EMAIL = "info@sportokol.com";
 
-/** Parent company. Sportokol is a product of Sports Management Systems. */
-export const COMPANY_SITE = "https://smsolutions.ai";
-
 /**
  * Envelope sender for form mail.
  *

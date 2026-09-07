@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Constellation } from "@/components/ui/Constellation";
 import { Reveal, TextReveal } from "@/components/ui/primitives";
 import { ContactForm } from "@/components/ContactForm";
-import { CONTACT_EMAIL, COMPANY_SITE } from "@/lib/nav";
+import { CONTACT_EMAIL } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Get in touch — book a demo",
@@ -39,20 +39,7 @@ export default function ContactPage() {
           <ContactForm />
         </Reveal>
 
-        <Reveal className="mt-12 grid gap-4 border-t border-white/10 pt-10 sm:grid-cols-2">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-lime">
-              Web
-            </p>
-            <a
-              href={COMPANY_SITE}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-2 inline-flex min-h-11 items-center text-base font-semibold hover:text-lime"
-            >
-              smsolutions.ai
-            </a>
-          </div>
+        <Reveal className="mt-12 border-t border-white/10 pt-10">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-lime">
               Email

@@ -3,7 +3,6 @@ import {
   siteName,
   siteDescription,
   contactEmail,
-  companySite,
 } from "@/lib/seo";
 import { FAQ_ITEMS } from "@/lib/faq";
 
@@ -30,7 +29,6 @@ export function StructuredData() {
       },
       description: siteDescription,
       email: contactEmail,
-      sameAs: [companySite],
       contactPoint: {
         "@type": "ContactPoint",
         email: contactEmail,
