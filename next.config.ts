@@ -23,6 +23,21 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        /**
+         * Drop-in artwork. Same reasoning as the icons: no content hash in the
+         * filename, so Next serves it uncached by default. A day is safe for
+         * files replaced by hand, and stale-while-revalidate means a swapped
+         * image still reaches people on their next visit.
+         */
+        source: "/media/:file*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
         source: "/team/:file*",
         headers: [
           {
