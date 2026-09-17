@@ -64,18 +64,24 @@ export function Hero({
           />
           {/*
             Two scrims, not one. The horizontal pass sits heaviest under the
-            left column where the text is and thins out to the right so the
-            artwork is still visible; the vertical pass lands the section into
-            the one below it. A single flat overlay dark enough for the text
-            would have hidden the image everywhere.
+            left column where the text is and thins to the right so the artwork
+            stays visible; the vertical pass lands the section into the one
+            below it.
+            
+            0.65 on the left, not the 0.9-odd a white background would need.
+            Measured against this artwork the brightest pixel anywhere behind
+            the headline is rgb(175,224,133) — one lime bib in the blurred
+            group — and 0.65 puts white on it at 7.3:1, well past the 4.5:1 AA
+            floor. Scrimming for a hypothetical white image instead buried a
+            photograph that is already almost the site's own navy.
           */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,22,40,0.95)_0%,rgba(10,22,40,0.88)_40%,rgba(10,22,40,0.5)_100%)]"
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,22,40,0.72)_0%,rgba(10,22,40,0.65)_42%,rgba(10,22,40,0.28)_100%)]"
           />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-b from-ink-950/40 via-transparent to-ink-950"
+            className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,22,40,0.45)_0%,rgba(10,22,40,0)_28%,rgba(10,22,40,0)_68%,rgba(10,22,40,1)_100%)]"
           />
         </>
       ) : (

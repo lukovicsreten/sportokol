@@ -26,7 +26,7 @@ export const contentType = "image/png";
  * artwork would hand the most important line on the card to an image
  * generator, which is exactly where type comes out warped.
  */
-const BACKGROUND = mediaDataUri("/media/og-background.png");
+const BACKGROUND = mediaDataUri("/media/og-background.jpg", "image/jpeg");
 
 export default function Image() {
   return new ImageResponse(
