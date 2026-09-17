@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { m } from "@/components/motion/Motion";
 import { Constellation } from "@/components/ui/Constellation";
 import { GradientMesh, FloatingMotes } from "@/components/ui/Backdrop";
 import { EyebrowLabel, TextReveal } from "@/components/ui/primitives";
@@ -99,13 +98,10 @@ export function Hero({
         )}
       >
         <div>
-          <m.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <EyebrowLabel>{eyebrow}</EyebrowLabel>
-          </m.div>
+          {/* CSS entrances above the fold — see the note in globals.css. */}
+          <div className="fade-up">
+            <EyebrowLabel still>{eyebrow}</EyebrowLabel>
+          </div>
 
           <TextReveal
             text={headline}
@@ -116,36 +112,25 @@ export function Hero({
           />
 
           {subhead && (
-            <m.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-7 max-w-xl text-lg leading-relaxed text-mist"
+            <p
+              style={{ animationDelay: "0.45s" }}
+              className="fade-up mt-7 max-w-xl text-lg leading-relaxed text-mist"
             >
               {subhead}
-            </m.p>
+            </p>
           )}
 
           {children && (
-            <m.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="mt-9"
-            >
+            <div style={{ animationDelay: "0.6s" }} className="fade-up mt-9">
               {children}
-            </m.div>
+            </div>
           )}
         </div>
 
         {aside && (
-          <m.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div style={{ animationDelay: "0.35s" }} className="fade-up">
             {aside}
-          </m.div>
+          </div>
         )}
       </div>
     </section>

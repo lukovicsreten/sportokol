@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { m, AnimatePresence } from "@/components/motion/Motion";
+import { m } from "@/components/motion/Motion";
 import { useMotionPrefs } from "@/lib/useMotionPrefs";
 
 /**
@@ -22,24 +22,26 @@ import { useMotionPrefs } from "@/lib/useMotionPrefs";
 const MIN_VISIBLE_MS = 700;
 const MIN_VISIBLE_REDUCED_MS = 400;
 
+/** Must match the duration in `.loader-overlay` in globals.css. */
+const FADE_MS = 450;
+
 /**
  * Full-screen loader with the blinking eye.
  *
  * Lives in the layout, not the template, so it mounts once. A template
- * remounts on every client navigation, which would replay the loader each
- * time a link is clicked.
+ * remounts on every client navigation, which would replay the loader on every
+ * link click.
  *
- * The overlay is server-rendered, so there is no flash of content before
- * hydration. Two safeguards keep that from becoming a trap if JavaScript
- * fails or is blocked:
- *   1. `loader-failsafe` in globals.css hides the overlay after 8s with a
- *      pure CSS animation, so the site can never be permanently covered.
- *   2. Content is only hidden while `data-loading` is on the root, and that
- *      attribute is set by this component — without JS it is never set, so
- *      the page renders normally.
+ * **CSS owns the fade; this component only unmounts the node.** The overlay is
+ * server-rendered, so with JavaScript in charge of the fade it could not leave
+ * before hydration — and on a throttled phone it sat over the page until the
+ * bundle had booted. Worse, once it did hydrate, Framer reset opacity to 1 and
+ * re-ran its own exit, so the eye visibly came back after having faded. The
+ * fade now lives entirely in `.loader-overlay` in globals.css, and React waits
+ * out that animation before removing the element.
  *
- * It leaves the DOM entirely once the exit finishes, rather than staying
- * invisible over the page and swallowing clicks.
+ * Without JavaScript the overlay still clears: the animation is pure CSS and
+ * ends in `pointer-events: none`, so the node left behind is inert.
  */
 export function PageLoader() {
   const { reduced } = useMotionPrefs();
@@ -60,13 +62,11 @@ export function PageLoader() {
   }, [loading]);
 
   useEffect(() => {
-    const minimum = reduced ? MIN_VISIBLE_REDUCED_MS : MIN_VISIBLE_MS;
-
-    // performance.now() is already milliseconds since navigation start, so it
-    // measures how long the visitor has been looking at the loader — not how
-    // long since this effect ran. Counting from mount instead restarted the
-    // clock after hydration and charged that time twice.
-    const remaining = Math.max(0, minimum - performance.now());
+    // The CSS animation starts at parse and runs MIN + FADE. Unmounting is
+    // only cleanup, so it waits out the whole of it rather than racing it —
+    // removing the node early would cut the fade short.
+    const total = (reduced ? MIN_VISIBLE_REDUCED_MS : MIN_VISIBLE_MS) + FADE_MS;
+    const remaining = Math.max(0, total - performance.now());
     const timer = setTimeout(() => setLoading(false), remaining);
     return () => clearTimeout(timer);
   }, [reduced]);
@@ -93,66 +93,55 @@ export function PageLoader() {
         },
       };
 
+  if (!loading) return null;
+
   return (
-    <AnimatePresence>
-      {loading && (
-        <m.div
-          key="page-loader"
-          className="loader-overlay fixed inset-0 z-[200] flex items-center justify-center bg-ink-950"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          role="status"
-          aria-live="polite"
-        >
-          <span className="sr-only">Loading Sportokol</span>
+    <div
+      className="loader-overlay fixed inset-0 z-[200] flex items-center justify-center bg-ink-950"
+      role="status"
+      aria-live="polite"
+    >
+      <span className="sr-only">Loading Sportokol</span>
 
-          <m.div
-            aria-hidden="true"
-            className="relative"
-            exit={{ scale: 1.15, opacity: 0 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* Halo, pulsing in step with the pupil. */}
-            <m.span
-              animate={glow}
-              className="absolute inset-0 -z-[1] rounded-full bg-lime/25 blur-[60px]"
-            />
+      <div aria-hidden="true" className="relative">
+        {/* Halo, pulsing in step with the pupil. */}
+        <m.span
+          animate={glow}
+          className="absolute inset-0 -z-[1] rounded-full bg-lime/25 blur-[60px]"
+        />
 
-            <svg viewBox="0 0 220 150" className="w-52 sm:w-64">
-              <path
-                d="M12 75C40 28 72 10 110 10C148 10 180 28 208 75C180 122 148 140 110 140C72 140 40 122 12 75Z"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="3"
-                strokeLinejoin="round"
-              />
-              {/* transform-box keeps the scale centred on the pupil itself
+        <svg viewBox="0 0 220 150" className="w-52 sm:w-64">
+          <path
+            d="M12 75C40 28 72 10 110 10C148 10 180 28 208 75C180 122 148 140 110 140C72 140 40 122 12 75Z"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="3"
+            strokeLinejoin="round"
+          />
+          {/* transform-box keeps the scale centred on the pupil itself
                   rather than on the SVG's origin. */}
-              <m.circle
-                cx="110"
-                cy="75"
-                r="30"
-                fill="#C6F135"
-                animate={pulse}
-                style={{
-                  transformBox: "fill-box",
-                  transformOrigin: "center",
-                  willChange: "transform",
-                }}
-              />
-              <circle cx="110" cy="75" r="12" fill="#0A1628" />
-              <m.path
-                d="M150 55C168 38 186 20 202 6"
-                stroke="#C6F135"
-                strokeWidth="8"
-                strokeLinecap="round"
-                animate={glow}
-              />
-            </svg>
-          </m.div>
-        </m.div>
-      )}
-    </AnimatePresence>
+          <m.circle
+            cx="110"
+            cy="75"
+            r="30"
+            fill="#C6F135"
+            animate={pulse}
+            style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
+              willChange: "transform",
+            }}
+          />
+          <circle cx="110" cy="75" r="12" fill="#0A1628" />
+          <m.path
+            d="M150 55C168 38 186 20 202 6"
+            stroke="#C6F135"
+            strokeWidth="8"
+            strokeLinecap="round"
+            animate={glow}
+          />
+        </svg>
+      </div>
+    </div>
   );
 }

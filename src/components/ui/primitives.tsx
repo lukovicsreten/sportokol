@@ -81,19 +81,32 @@ export function SectionLight({
 export function EyebrowLabel({
   children,
   dark = true,
+  still = false,
   className,
 }: {
   children: React.ReactNode;
   /** Bright lime only clears contrast on dark; light surfaces get the deep tone. */
   dark?: boolean;
+  /**
+   * Skip the Framer entrance and render a plain paragraph. Used above the
+   * fold, where an inline opacity:0 would keep the label unpainted until
+   * hydration; the hero animates it in CSS instead.
+   */
+  still?: boolean;
   className?: string;
 }) {
+  const Wrap = still ? "p" : m.p;
+  const anim = still
+    ? {}
+    : {
+        initial: { opacity: 0, x: -24 },
+        whileInView: { opacity: 1, x: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.6, ease: EASE },
+      };
   return (
-    <m.p
-      initial={{ opacity: 0, x: -24 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, ease: EASE }}
+    <Wrap
+      {...anim}
       className={cn(
         "flex items-center gap-2 text-xs font-bold uppercase tracking-[0.28em]",
         dark ? "text-lime" : "text-lime-deep",
@@ -107,7 +120,7 @@ export function EyebrowLabel({
         className={cn("h-px w-3", dark ? "bg-lime" : "bg-lime-deep")}
       />
       {children}
-    </m.p>
+    </Wrap>
   );
 }
 
@@ -149,15 +162,45 @@ export function TextReveal({
       .filter((w) => w.length > 0)
       .map((w) => ({ word: w, accent: seg.accent }))
   );
+  /*
+   * The mount path runs in CSS and renders no Framer component at all.
+   *
+   * Framer's `initial` is an inline style the server renders too, so the
+   * words sat at opacity 0 until the bundle arrived and React hydrated —
+   * measured at 3.3s on a throttled phone, with LCP following the headline
+   * down. A CSS animation starts when the stylesheet parses, so the same
+   * entrance now begins at first paint.
+   *
+   * Scroll-triggered headings keep Framer: they need to know when they enter
+   * the viewport, which CSS alone cannot tell them here.
+   */
+  if (trigger === "mount") {
+    const Plain = Tag;
+    return (
+      <Plain className={cn("balance", className)}>
+        {words.map(({ word, accent }, i) => (
+          <Fragment key={`${word}-${i}`}>
+            <span className="inline-block">
+              <span
+                className={cn("rise-in inline-block", accent && "text-lime")}
+                style={{ animationDelay: `${(delay + i * 0.06).toFixed(2)}s` }}
+              >
+                {word}
+              </span>
+            </span>
+            {i < words.length - 1 && " "}
+          </Fragment>
+        ))}
+      </Plain>
+    );
+  }
+
   const MTag = Tag === "h1" ? m.h1 : m.h2;
 
-  const activation =
-    trigger === "mount"
-      ? { animate: "visible" as const }
-      : {
-          whileInView: "visible" as const,
-          viewport: { once: true, margin: "-80px" },
-        };
+  const activation = {
+    whileInView: "visible" as const,
+    viewport: { once: true, margin: "-80px" },
+  };
 
   return (
     <MTag
