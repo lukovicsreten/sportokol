@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Hero, GlowEye } from "@/components/ui/Hero";
 import { SportPills } from "@/components/ui/SportPills";
 import { CTAButton } from "@/components/ui/CTAButton";
@@ -12,38 +13,61 @@ import { Card, CountUp } from "@/components/ui/cards";
 import { TractionBar, ClosingCta } from "@/components/sections/shared";
 import { Faq } from "@/components/sections/Faq";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { hasMedia } from "@/lib/media";
 
+/**
+ * `image` is a drop-in under public/media. Until the file is there the card
+ * renders exactly as it does today — see src/lib/media.ts.
+ */
 const PROBLEMS = [
   {
+    image: "/media/problem-invisible-talent.jpg",
     title: "Invisible Talent: Why Video-Based Scouting Fails",
     body: "Youth & grassroots are barely filmed, so video-based incumbents (Wyscout, Hudl) have nothing to work with.",
     fix: "Captures pitch-side observation and no video needed.",
   },
   {
+    image: "/media/problem-birthday-bias.jpg",
     title: "Birthday Bias: How Relative Age Effect Skews Selection",
     body: "The relative-age effect skews selection ~90/10 toward early-born kids at age 6; late developers are lost for good.",
     fix: "Tracks development over time to catch the late bloomers.",
   },
   {
+    image: "/media/problem-subjective-evaluation.jpg",
     title: "Subjective Evaluation: The Need for a Shared Framework",
     body: "Scouts (un)consciously rate older, bigger kids higher, with no shared framework to compare players fairly.",
     fix: "One shared framework for every player comparable.",
   },
   {
+    image: "/media/problem-lost-knowledge.jpg",
     title: "Lost Knowledge: When Scouts Leave, Data Walks Out",
     body: "Scouting still lives in notebooks, spreadsheets and PDFs, when a scout leaves, years of context leave too.",
     fix: "One owned database, a memory that compounds.",
   },
 ];
 
+const HERO_POSTER = "/media/hero-poster.jpg";
+
 export default function HomePage() {
+  // Checked at build time, so a missing file costs nothing at runtime and the
+  // generated backdrop simply stays.
+  const heroBackdrop = hasMedia(HERO_POSTER) ? { src: HERO_POSTER } : null;
+
   return (
     <>
       <Hero
+        backdrop={heroBackdrop}
         eyebrow="Sports management systems"
         headline="Never lose a future **professional** again."
         subhead="A scout-first platform that turns pitch-side observation into a living, national database of talent."
-        aside={<GlowEye />}
+        /*
+         * The eye steps aside when there is a photograph. Both want the right
+         * half of the hero, and the halo sat exactly over the floodlight and
+         * the scout — the two things worth seeing in the image. The mark is
+         * already in the navbar and the footer; the photograph is the thing
+         * this page does not otherwise have.
+         */
+        aside={heroBackdrop ? undefined : <GlowEye />}
       >
         <SportPills />
         <p className="mt-5 text-sm text-mist">
@@ -80,7 +104,10 @@ export default function HomePage() {
           {/* Numbers roughly 50% larger than the label beneath them, and the
               two stats separated by real space rather than a hairline — the
               size gap is what makes the hierarchy read at a glance. */}
-          <Reveal className="rounded-2xl bg-ink-950 p-8 text-white sm:p-10">
+          {/* self-start so the stats keep their own height. The grid stretches
+              items by default, and once the cards next to them grew artwork the
+              panel was padding out 600px of empty navy to match. */}
+          <Reveal className="self-start rounded-2xl bg-ink-950 p-8 text-white sm:p-10">
             <p className="font-display text-[5.5rem] font-extrabold leading-[0.95] tracking-tight text-lime sm:text-[6.5rem]">
               <CountUp value={4} suffix="%" />
             </p>
@@ -110,6 +137,24 @@ export default function HomePage() {
             {PROBLEMS.map((p, i) => (
               <RevealItem key={p.title} index={i}>
                 <Card dark={false} className="h-full">
+                  {hasMedia(p.image) && (
+                    <div className="relative mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-ink-950">
+                      {/*
+                        Decorative: each illustration restates the heading
+                        beneath it, so a screen reader announcing both would
+                        read the same point twice. The aspect box is fixed so
+                        the card height is identical before and after the file
+                        lands — no layout shift when artwork is dropped in.
+                      */}
+                      <Image
+                        src={p.image}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 24rem, (min-width: 640px) 45vw, 90vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
                   <h3 className="font-display text-base font-extrabold leading-snug text-ink-950">
                     {p.title}
                   </h3>

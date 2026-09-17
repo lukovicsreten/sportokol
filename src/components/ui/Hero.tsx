@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { m } from "@/components/motion/Motion";
 import { Constellation } from "@/components/ui/Constellation";
 import { GradientMesh, FloatingMotes } from "@/components/ui/Backdrop";
@@ -18,6 +19,7 @@ export function Hero({
   subhead,
   children,
   aside,
+  backdrop,
   full = true,
   className,
 }: {
@@ -27,6 +29,15 @@ export function Hero({
   subhead?: string;
   children?: React.ReactNode;
   aside?: React.ReactNode;
+  /**
+   * Artwork behind the hero, replacing the generated backdrop rather than
+   * layering over it — running a photograph underneath a canvas lattice and a
+   * particle field pays for two backgrounds and shows one.
+   *
+   * Pass it only where the file is known to exist; the page checks with
+   * hasMedia() so a missing drop-in leaves the generated backdrop in place.
+   */
+  backdrop?: { src: string } | null;
   full?: boolean;
   className?: string;
 }) {
@@ -38,9 +49,48 @@ export function Hero({
         className
       )}
     >
-      <GradientMesh />
-      <Constellation strength={110} />
-      <FloatingMotes />
+      {backdrop ? (
+        <>
+          {/* Decorative: the headline carries the meaning, so alt stays empty
+              rather than describing scenery a screen reader does not need.
+              `priority` because on Home this is the LCP candidate. */}
+          <Image
+            src={backdrop.src}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          {/*
+            Two scrims, not one. The horizontal pass sits heaviest under the
+            left column where the text is and thins to the right so the artwork
+            stays visible; the vertical pass lands the section into the one
+            below it.
+            
+            0.65 on the left, not the 0.9-odd a white background would need.
+            Measured against this artwork the brightest pixel anywhere behind
+            the headline is rgb(175,224,133) — one lime bib in the blurred
+            group — and 0.65 puts white on it at 7.3:1, well past the 4.5:1 AA
+            floor. Scrimming for a hypothetical white image instead buried a
+            photograph that is already almost the site's own navy.
+          */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,22,40,0.72)_0%,rgba(10,22,40,0.65)_42%,rgba(10,22,40,0.28)_100%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,22,40,0.45)_0%,rgba(10,22,40,0)_28%,rgba(10,22,40,0)_68%,rgba(10,22,40,1)_100%)]"
+          />
+        </>
+      ) : (
+        <>
+          <GradientMesh />
+          <Constellation strength={110} />
+          <FloatingMotes />
+        </>
+      )}
 
       <div
         className={cn(

@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { siteDescription } from "@/lib/seo";
+import { mediaDataUri } from "@/lib/media";
 
 export const alt =
   "Sportokol — a scouting platform that turns pitch-side observation into a national database of talent";
@@ -13,6 +14,20 @@ export const contentType = "image/png";
  * cannot fetch relative URLs, and inlining avoids having to base64 a file
  * into the bundle for one image.
  */
+/**
+ * Optional artwork behind the card.
+ *
+ * Satori cannot fetch a relative URL, so the file has to arrive inline as a
+ * data URI — hence the base64 read rather than a plain src. Base64 costs about
+ * a third on top of the file size, and this runs once at build time, so keep
+ * the source to the 1200x630 the card actually needs.
+ *
+ * The text stays rendered by Satori on top of it. Baking the headline into the
+ * artwork would hand the most important line on the card to an image
+ * generator, which is exactly where type comes out warped.
+ */
+const BACKGROUND = mediaDataUri("/media/og-background.jpg", "image/jpeg");
+
 export default function Image() {
   return new ImageResponse(
     (
@@ -28,30 +43,54 @@ export default function Image() {
           position: "relative",
         }}
       >
-        {/* Lattice, echoing the site's backdrop. */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 44,
-            padding: 30,
-            opacity: 0.3,
-          }}
-        >
-          {Array.from({ length: 168 }).map((_, i) => (
+        {BACKGROUND ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={BACKGROUND}
+              alt=""
+              width={1200}
+              height={630}
+              style={{ position: "absolute", inset: 0, objectFit: "cover" }}
+            />
+            {/* Heaviest on the left third, where the headline sits. */}
             <div
-              key={i}
               style={{
-                width: 5,
-                height: 5,
-                borderRadius: 5,
-                background: i % 9 === 0 ? "#C6F135" : "#35507F",
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to right, rgba(10,22,40,0.93) 0%, rgba(10,22,40,0.82) 45%, rgba(10,22,40,0.45) 100%)",
               }}
             />
-          ))}
-        </div>
+          </>
+        ) : (
+          /* Lattice, echoing the site's backdrop. Stands down when there is
+             artwork — two patterns competing behind the same text is worse
+             than either alone. */
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 44,
+              padding: 30,
+              opacity: 0.3,
+            }}
+          >
+            {Array.from({ length: 168 }).map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: 5,
+                  background: i % 9 === 0 ? "#C6F135" : "#35507F",
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <svg width="74" height="50" viewBox="0 0 220 150">
